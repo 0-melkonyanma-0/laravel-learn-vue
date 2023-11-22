@@ -3,9 +3,7 @@ function page (path) {
 }
 
 export default [
-  { path: '/', name: 'welcome', component: page('welcome.vue') },
-
-  { path: '/login', name: 'login', component: page('auth/login.vue') },
+  { path: '/', name: 'login', component: page('auth/login.vue') },
   { path: '/home', name: 'home', component: page('home.vue') },
   {
     path: '/departments',
