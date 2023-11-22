@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "dev": "mix watch --hot",
-    "watch": "mix watch",
     "build": "mix --production",
-    "eslint": "eslint --fix --ext .js,.vue resources/js"
+    "devx": "mix watch --hot",
+    "eslint": "eslint --fix --ext .js,.vue resources/js",
+    "dev": "mix watch"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -12,6 +12,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^2.0.2",
+    "@mdi/font": "^7.3.67",
     "@popperjs/core": "^2.9.3",
     "axios": "^0.21.1",
     "bootstrap": "^5.1.0",
@@ -22,6 +23,7 @@
     "vue-i18n": "^8.25.0",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.2",
+    "vuetify": "^2.6.0",
     "vuex": "^3.6.2",
     "vuex-router-sync": "^5.0.0"
   },
@@ -42,8 +44,10 @@
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0",
+    "vue-cli-plugin-vuetify": "~2.5.8",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.9.2",
     "webpack-bundle-analyzer": "^4.4.2"
   }
 }

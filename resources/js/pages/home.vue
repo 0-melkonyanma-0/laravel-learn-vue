@@ -1,9 +1,14 @@
 <template>
   <div class="row">
     <div class="col-lg-10 m-auto">
-      <card :title="$t('home')">
+<!--      <card :title="$t('home')">-->
+<!--        <v-card>-->
+<!--          test-->
+<!--        </v-card>-->
+<!--      </card>-->
+      <v-card>
         {{ $t('you_are_logged_in') }}
-      </card>
+      </v-card>
     </div>
   </div>
 </template>

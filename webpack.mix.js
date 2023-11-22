@@ -5,6 +5,12 @@ require('laravel-mix-versionhash')
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 mix
+  .options({
+    hmrOptions: {
+      host: 'localhost',
+      port: '8081'
+    }
+  })
   .js('resources/js/app.js', 'public/dist/js').vue({
     extractStyles: true
   })
