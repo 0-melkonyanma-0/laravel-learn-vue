@@ -4,35 +4,68 @@
       app
       fixed
     >
-     <v-app-bar-nav-icon
-      @click="drawer = !drawer"
-     ></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click="drawer = !drawer"
+      >
+      </v-app-bar-nav-icon>
+      <v-spacer></v-spacer>
+      <v-btn plain>
+        <locale-dropdown/>
+      </v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-badge
+            bordered
+            bottom
+            color="success"
+            dot
+            offset-x="10"
+            offset-y="10"
+          >
+            <v-avatar
+              size="40"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-img :src="user.photo_url"/>
+            </v-avatar>
+          </v-badge>
+        </template>
+        <v-list dense>
+          <v-list-item-group>
+            <div @click.prevent="logout">
+              <menu-button :icon="'mdi-logout'">
+                {{ $t('logout') }}
+              </menu-button>
+            </div>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
     </v-app-bar>
-    <v-navigation-drawer
-      app
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent
-    >
-      test
-      <v-divider></v-divider>
-    </v-navigation-drawer>
+    <drawer
+      v-if="user"
+      :drawer="drawer"
+      :app-name="appName">
+    </drawer>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import LocaleDropdown from './LocaleDropdown'
+import Drawer from "./Drawer.vue";
+import MenuButton from "./MenuButton.vue";
 
 export default {
   components: {
+    MenuButton,
+    Drawer,
     LocaleDropdown
   },
 
   data: () => ({
     appName: window.config.appName,
-    drawer: false,
-    mini: true,
+    drawer: true,
   }),
 
   computed: mapGetters({

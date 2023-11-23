@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <v-app>
-      <loading ref="loading" />
+      <v-main>
+        <loading ref="loading"/>
 
-      <transition name="page" mode="out-in">
-        <component :is="layout" v-if="layout" />
-      </transition>
+        <transition mode="out-in" name="page">
+          <component :is="layout" v-if="layout"/>
+        </transition>
+      </v-main>
     </v-app>
   </div>
 </template>
@@ -37,8 +39,8 @@ export default {
     defaultLayout: 'default'
   }),
 
-  metaInfo () {
-    const { appName } = window.config
+  metaInfo() {
+    const {appName} = window.config
 
     return {
       title: appName,
@@ -46,7 +48,7 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.$loading = this.$refs.loading
   },
 
@@ -56,7 +58,7 @@ export default {
      *
      * @param {String} layout
      */
-    setLayout (layout) {
+    setLayout(layout) {
       if (!layout || !layouts[layout]) {
         layout = this.defaultLayout
       }
