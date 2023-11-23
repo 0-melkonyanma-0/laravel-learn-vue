@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use App\Models\User\User;
 use App\Notifications\VerifyEmail;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;

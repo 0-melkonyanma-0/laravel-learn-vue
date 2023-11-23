@@ -1,6 +1,24 @@
 <template>
   <v-container>
     <v-card>
+      <v-form>
+        <v-text-field
+          v-model="form.title"
+          :label="$t('title')"
+          name="title"
+          outlined
+        >
+        </v-text-field>
+      </v-form>
+      <v-btn
+        type="success"
+        @click="createDepartment"
+      >
+        {{ $t('create') }}
+      </v-btn>
+    </v-card>
+
+    <v-card>
       <v-card-title>
         {{ $t('departments') }}
         <div class="ml-2"></div>
@@ -21,19 +39,26 @@
         </v-text-field>
         <v-btn
           icon
+          @click="fetchDepartments"
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </v-card-title>
+
       <v-card-text>
         <v-data-table
           ref="departmentTable"
           :headers="departmentTableHeader"
-          :items="items"
+          :items="departments"
           :loading="loading"
+          :search="search"
         >
-          <template slot="progress">
+          <template v-slot:progress>
             <v-progress-linear color="red" indeterminate></v-progress-linear>
+          </template>
+          <template v-slot:item.actions="{item}">
+            <v-icon color="success" @click="">mdi-pencil</v-icon>
+            <v-icon color="error" @click="deleteDepartment(item.id)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -42,21 +67,47 @@
 </template>
 
 <script>
+import axios from "axios";
+import Form from "vform";
+
 export default {
   name: "index.vue",
+  middleware: 'auth',
   computed: {
     departmentTableHeader() {
       return [
-        {text: this.$t('title'), value: 'department'},
-        {text: '', value: 'actions'}
+        {text: this.$t('title'), value: 'title', sortable: true},
+        {text: this.$t('actions'), value: 'actions', align: 'end', sortable: false}
       ]
     },
-    items: [],
+  },
+  mounted() {
+    this.fetchDepartments();
   },
   data: () => ({
     search: '',
     loading: true,
+    form: new Form({
+      title: ''
+    }),
+    departments: [],
   }),
+  methods: {
+    fetchDepartments() {
+      axios.get('/api/departments').then((response) => {
+        this.departments = response.data;
+        this.loading = false;
+      });
+    },
+    deleteDepartment(dep_id) {
+      axios.delete(`/api/departments/${dep_id}`).then(() => {
+        this.fetchDepartments();
+      });
+    },
+    createDepartment() {
+      this.form.post('/api/departments');
+    }
+  }
 }
 </script>
 

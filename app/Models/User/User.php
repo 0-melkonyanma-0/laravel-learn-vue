@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
+use App\Models\OAuthProvider;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
 {

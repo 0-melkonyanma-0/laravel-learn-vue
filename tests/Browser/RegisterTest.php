@@ -2,7 +2,7 @@
 
 namespace Tests\Browser;
 
-use App\Models\User;
+use App\Models\User\User;
 use Tests\Browser\Pages\Home;
 use Tests\Browser\Pages\Register;
 use Tests\DuskTestCase;

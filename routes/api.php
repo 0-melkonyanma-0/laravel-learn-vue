@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+
+    Route::get('departments', [DepartmentController::class, 'index']);
+    Route::post('departments', [DepartmentController::class, 'store']);
+    Route::patch('departments/{id}', [DepartmentController::class, 'update']);
+    Route::delete('departments/{id}', [DepartmentController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

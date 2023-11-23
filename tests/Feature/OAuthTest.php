@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Laravel\Socialite\Facades\Socialite;
