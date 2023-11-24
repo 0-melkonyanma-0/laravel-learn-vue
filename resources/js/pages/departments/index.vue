@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-card-subtitle>test</v-card-subtitle>
     <v-card>
       <v-form>
         <v-text-field
@@ -33,18 +34,17 @@
         <v-text-field
           v-model="search"
           :placeholder="$t('search_placeholder')"
-          dense
           prepend-inner-icon="mdi-magnify"
         >
         </v-text-field>
         <v-btn
+          class="ml-1"
           icon
           @click="fetchDepartments"
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </v-card-title>
-
       <v-card-text>
         <v-data-table
           ref="departmentTable"
@@ -91,6 +91,7 @@ export default {
       title: ''
     }),
     departments: [],
+    errors: [],
   }),
   methods: {
     fetchDepartments() {
