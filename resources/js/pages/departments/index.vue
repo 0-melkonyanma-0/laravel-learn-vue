@@ -1,23 +1,36 @@
 <template>
   <v-container>
-    <v-card-subtitle>test</v-card-subtitle>
-    <v-card>
+    <v-dialog
+      v-model="createDepartmentDialog"
+      width="500"
+    >
       <v-form @submit.prevent="false">
-        <v-text-field
-          v-model="departmentBody.title"
-          :label="$t('title')"
-          name="title"
-          outlined
-        >
-        </v-text-field>
+        <v-card>
+
+          <v-card-title>{{ $t('department') }}</v-card-title>
+          <v-card-text>
+
+            <v-text-field
+              v-model="departmentBody.title"
+              :label="$t('title')"
+              name="title"
+              outlined
+            >
+            </v-text-field>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              type="success"
+              @click="createDepartment(departmentBody)"
+            >
+              {{ $t('create') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
       </v-form>
-      <v-btn
-        type="success"
-        @click="createDepartment(JSON.parse(JSON.stringify(departmentBody)))"
-      >
-        {{ $t('create') }}
-      </v-btn>
-    </v-card>
+
+    </v-dialog>
 
     <v-card>
       <v-card-title>
@@ -26,6 +39,7 @@
         <v-btn
           color="primary"
           rounded
+          @click="createDepartmentDialog = !createDepartmentDialog"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -76,6 +90,7 @@ export default {
     ...mapGetters({
       departments: 'departments/departments',
       loading: 'departments/loading',
+      errors: 'departments/errors',
     }),
 
     departmentTableHeader() {
@@ -93,6 +108,9 @@ export default {
     departmentBody: {
       title: ''
     },
+
+    createDepartmentDialog: true,
+    isShowError: true
   }),
   methods: {
     ...mapActions({
