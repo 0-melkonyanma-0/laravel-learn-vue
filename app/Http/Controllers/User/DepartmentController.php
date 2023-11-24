@@ -28,7 +28,7 @@ class DepartmentController extends Controller
 
     public function store(DepartmentStoreRequest $request): JsonResponse
     {
-        $this->departmentService->store($request->validated());
+        $this->departmentService->save($request->validated());
 
         return response()->json(['message' => __('success_saved')]);
     }

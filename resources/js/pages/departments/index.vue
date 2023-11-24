@@ -2,9 +2,9 @@
   <v-container>
     <v-card-subtitle>test</v-card-subtitle>
     <v-card>
-      <v-form>
+      <v-form @submit.prevent="false">
         <v-text-field
-          v-model="form.title"
+          v-model="departmentBody.title"
           :label="$t('title')"
           name="title"
           outlined
@@ -13,7 +13,7 @@
       </v-form>
       <v-btn
         type="success"
-        @click="createDepartment"
+        @click="createDepartment(JSON.parse(JSON.stringify(departmentBody)))"
       >
         {{ $t('create') }}
       </v-btn>
@@ -67,13 +67,17 @@
 </template>
 
 <script>
-import axios from "axios";
-import Form from "vform";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "index.vue",
   middleware: 'auth',
   computed: {
+    ...mapGetters({
+      departments: 'departments/departments',
+      loading: 'departments/loading',
+    }),
+
     departmentTableHeader() {
       return [
         {text: this.$t('title'), value: 'title', sortable: true},
@@ -86,28 +90,16 @@ export default {
   },
   data: () => ({
     search: '',
-    loading: true,
-    form: new Form({
+    departmentBody: {
       title: ''
-    }),
-    departments: [],
-    errors: [],
+    },
   }),
   methods: {
-    fetchDepartments() {
-      axios.get('/api/departments').then((response) => {
-        this.departments = response.data;
-        this.loading = false;
-      });
-    },
-    deleteDepartment(dep_id) {
-      axios.delete(`/api/departments/${dep_id}`).then(() => {
-        this.fetchDepartments();
-      });
-    },
-    createDepartment() {
-      this.form.post('/api/departments');
-    }
+    ...mapActions({
+      fetchDepartments: 'departments/fetchDepartments',
+      deleteDepartment: 'departments/deleteDepartment',
+      createDepartment: 'departments/createDepartment',
+    }),
   }
 }
 </script>
