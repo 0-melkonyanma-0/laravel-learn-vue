@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Department\DepartmentRequest;
@@ -17,6 +19,8 @@ class DepartmentController extends Controller
     public function store(DepartmentRequest $request)
     {
         Department::create($request->validated());
+
+        return response()->json(['message' => __('success_saved')]);
     }
 
     public function update(DepartmentRequest $request, int $id)
