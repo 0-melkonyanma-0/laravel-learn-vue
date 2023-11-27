@@ -19,7 +19,6 @@ export const getters = {
 export const actions = {
     fetchJobTitles(ctx) {
         axios.get('/api/job-titles').then((response) => {
-            console.log(response.data);
             ctx.commit('updateJobTitles', response.data);
         })
     },
