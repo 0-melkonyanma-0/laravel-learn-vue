@@ -1,90 +1,76 @@
 <template>
   <v-container>
     <v-dialog
-      v-model="createDepartmentDialog"
-      width="500"
+        v-model="dialogOn"
+        width="500"
     >
-      <v-form @submit.prevent="false">
-        <v-card>
-
-          <v-card-title>{{ $t('department') }}</v-card-title>
-          <v-card-text>
-
-            <v-text-field
-              v-model="departmentBody.title"
-              :label="$t('title')"
-              name="title"
-              outlined
-            >
-            </v-text-field>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              type="success"
-              @click="createDepartment(departmentBody)"
-            >
-              {{ $t('create') }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-form v-if="createDepartmentDialog" @submit.prevent="false">
+        <create :errors="errors">
+        </create>
       </v-form>
 
+      <v-form v-else-if="editDepartmentDialog" @submit.prevent="false">
+        <edit :item="editItem" :errors="errors"/>
+      </v-form>
     </v-dialog>
 
-    <v-card>
-      <v-card-title>
-        {{ $t('departments') }}
+    <card :title="$t('departments')">
+      <template v-slot:card-title>
         <div class="ml-2"></div>
         <v-btn
-          color="primary"
-          rounded
-          @click="createDepartmentDialog = !createDepartmentDialog"
+            color="primary"
+            rounded
+            @click="creator"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-spacer>
         </v-spacer>
         <v-text-field
-          v-model="search"
-          :placeholder="$t('search_placeholder')"
-          prepend-inner-icon="mdi-magnify"
+            v-model="search"
+            :placeholder="$t('search_placeholder')"
+            height="40"
+            prepend-inner-icon="mdi-magnify"
         >
         </v-text-field>
         <v-btn
-          class="ml-1"
-          icon
-          @click="fetchDepartments"
+            class="ml-1"
+            icon
+            @click="fetchDepartments"
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
-      </v-card-title>
-      <v-card-text>
+      </template>
+      <template v-slot:card-text>
         <v-data-table
-          ref="departmentTable"
-          :headers="departmentTableHeader"
-          :items="departments"
-          :loading="loading"
-          :search="search"
+            ref="departmentTable"
+            :headers="departmentTableHeader"
+            :items="departments"
+            :loading="loading"
+            :search="search"
         >
           <template v-slot:progress>
             <v-progress-linear color="red" indeterminate></v-progress-linear>
           </template>
           <template v-slot:item.actions="{item}">
-            <v-icon color="success" @click="">mdi-pencil</v-icon>
+            <v-icon color="success" @click="editor(item)">mdi-pencil</v-icon>
             <v-icon color="error" @click="deleteDepartment(item.id)">mdi-delete</v-icon>
           </template>
         </v-data-table>
-      </v-card-text>
-    </v-card>
+      </template>
+    </card>
   </v-container>
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import Card from "../../components/Card.vue";
+import Create from "./create.vue";
+import Edit from "./edit.vue";
 
 export default {
   name: "index.vue",
+  components: {Edit, Create, Card},
   middleware: 'auth',
   computed: {
     ...mapGetters({
@@ -103,25 +89,40 @@ export default {
   mounted() {
     this.fetchDepartments();
   },
+  watch: {
+    dialogOn: {
+      handler() {
+        this.clearErrors()
+      }
+    }
+  },
   data: () => ({
     search: '',
-    departmentBody: {
-      title: ''
-    },
+    editItem: {},
 
-    createDepartmentDialog: true,
-    isShowError: true
+    createDepartmentDialog: false,
+    editDepartmentDialog: false,
+    dialogOn: false,
   }),
   methods: {
     ...mapActions({
       fetchDepartments: 'departments/fetchDepartments',
       deleteDepartment: 'departments/deleteDepartment',
-      createDepartment: 'departments/createDepartment',
     }),
+    ...mapMutations({
+      clearErrors: 'departments/clearErrors',
+    }),
+    creator() {
+      this.dialogOn = true;
+      this.editDepartmentDialog = false;
+      this.createDepartmentDialog = true;
+    },
+    editor(item) {
+      this.editItem = item;
+      this.dialogOn = true;
+      this.createDepartmentDialog = false;
+      this.editDepartmentDialog = true;
+    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

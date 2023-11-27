@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\User\DepartmentController;
+use App\Http\Controllers\User\JobTitleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('departments', [DepartmentController::class, 'store']);
     Route::patch('departments/{id}', [DepartmentController::class, 'update']);
     Route::delete('departments/{id}', [DepartmentController::class, 'destroy']);
+
+    Route::get('job-titles', [JobTitleController::class, 'index']);
+    Route::post('job-titles', [JobTitleController::class, 'store']);
+    Route::patch('job-titles/{id}', [JobTitleController::class, 'update']);
+    Route::delete('job-titles/{id}', [JobTitleController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

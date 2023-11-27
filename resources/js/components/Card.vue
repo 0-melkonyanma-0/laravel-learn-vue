@@ -1,13 +1,16 @@
-template>
-  <div class="card">
-    <div v-if="title" class="card-header">
+<template>
+  <v-card>
+    <v-card-title>
       {{ title }}
-    </div>
-
-    <div class="card-body">
-      <slot />
-    </div>
-  </div>
+      <slot name="card-title"/>
+    </v-card-title>
+    <v-card-text>
+      <slot name="card-text"/>
+    </v-card-text>
+    <v-card-actions class="pa-4">
+      <slot name="card-actions"/>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -15,7 +18,7 @@ export default {
   name: 'Card',
 
   props: {
-    title: { type: String, default: null }
+    title: {type: String, default: null}
   }
 }
 </script>
