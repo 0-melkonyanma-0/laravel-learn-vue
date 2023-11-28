@@ -25,6 +25,11 @@ class RoleController extends Controller
         return $this->roleService->getAll();
     }
 
+    public function getPermissions(): Collection
+    {
+        return $this->roleService->getPermissions();
+    }
+
     public function store(RoleStoreRequest $request): JsonResponse
     {
         $this->roleService->store($request->validated());

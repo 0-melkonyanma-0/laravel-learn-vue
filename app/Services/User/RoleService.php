@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace App\Services\User;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleService
 {
     public function getAll(): Collection
     {
-        return Role::where('name', '!=', 'admin')->get();
+        return Role::whereNotIn('name', ['admin'])->get();
+    }
+
+    public function getPermissions(): Collection
+    {
+        return Permission::all();
     }
 
     public function store(array $data): void

@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('job-titles/{id}', [JobTitleController::class, 'destroy']);
 
     Route::get('roles', [RoleController::class, 'index']);
+    Route::get('roles/permissions', [RoleController::class, 'getPermissions']);
     Route::post('roles', [RoleController::class, 'store']);
     Route::patch('roles/{id}', [RoleController::class, 'update']);
     Route::delete('roles/{id}', [RoleController::class, 'destroy']);

@@ -4,10 +4,6 @@ export const state = {
     departments: [],
     errors: [],
     loading: true,
-    search: '',
-    body: {
-        title: ''
-    }
 }
 
 export const getters = {

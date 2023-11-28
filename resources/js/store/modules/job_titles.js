@@ -4,10 +4,6 @@ export const state = {
     jobTitles: [],
     errors: [],
     loading: true,
-    search: '',
-    body: {
-        title: ''
-    }
 }
 
 export const getters = {
