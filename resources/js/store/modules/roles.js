@@ -4,7 +4,7 @@ export const state = {
   roles: [],
   permissions: [],
   errors: [],
-  loading: true,
+  loading: false,
 }
 
 export const getters = {
@@ -16,32 +16,38 @@ export const getters = {
 
 export const actions = {
   fetchRoles(ctx) {
+    ctx.commit('loading');
     axios.get('/api/roles').then((response) => {
       ctx.commit('updateRoles', response.data);
     });
   },
   fetchPermissions(ctx) {
+    ctx.commit('loading');
     axios.get('/api/roles/permissions').then((response) => {
       ctx.commit('updatePermissions', response.data)
     });
   },
   deleteRole(ctx, id) {
     axios.delete(`/api/roles/${id}`).then(() => {
-      ctx.commit('deleteRoles', id)
+      ctx.commit('deleteRole', id)
     });
   },
-  updateRole(ctx, department) {
-    axios.patch(`/api/roles/${department.id}`, department).then(() => {
+  updateRole(ctx, role) {
+    axios.patch(`/api/roles/${role.id}`, role).then(() => {
+      window.location.href = '/users/roles';
       ctx.dispatch('fetchRoles');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
     });
   },
   createRole(ctx, body) {
-    axios.post('/api/departments', {...body}).then((response) => {
-      ctx.dispatch('fetchDepartments');
+    window.location.href = '/users/roles';
+
+    axios.post('/api/roles', {...body}).then((response) => {
       body.title = '';
+      body.permissions = [];
       ctx.commit('clearErrors');
+      ctx.dispatch('fetchRoles');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
     });
@@ -50,7 +56,7 @@ export const actions = {
 
 export const mutations = {
   updateRoles(state, roles) {
-    state.roles = roles
+    state.roles = roles;
     state.loading = false
   },
   updatePermissions(state, permissions) {
@@ -59,21 +65,21 @@ export const mutations = {
       name: permission.name,
     }));
 
-    let permissionsGroup = [];
+    let groupedPermissions = [];
 
     permissions.forEach(el => {
-      name = el.name.split(' ')
+      let title = el.name.split(' ');
 
-      if (!permissionsGroup.includes(name)) {
-        permissionsGroup.push({name: [el]});
+      if (!groupedPermissions.includes(title[1])) {
+        groupedPermissions.push(title[1]);
+        groupedPermissions[title[1]] = [[title[0], el.id]];
       } else {
-        permissionsGroup[name].push(el);
+        groupedPermissions[title[1]].push([title[0], el.id]);
       }
     });
 
-    console.log(permissionsGroup);
-
-    state.permissions = permissions;
+    state.permissions = groupedPermissions;
+    state.loading = false;
   },
   permissions(state, roles) {
     state.roles = roles
@@ -87,5 +93,8 @@ export const mutations = {
   },
   clearErrors(state) {
     state.errors = []
+  },
+  loading(state) {
+    state.loading = !state.loading;
   }
 }

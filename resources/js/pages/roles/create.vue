@@ -5,6 +5,7 @@
         <template v-slot:card-text>
           <v-text-field
             v-model="body.title"
+            :error-messages="errorMessage"
             :label="$t('title')"
             dense
             name="name"
@@ -12,23 +13,35 @@
             type="text"
           ></v-text-field>
 
+          {{ body.permissions }}
+
           <v-divider/>
 
-          <v-expansion-panels>
+          <v-expansion-panels v-if="!loading">
             <v-expansion-panel
-              v-for="(item,i) in 5"
+              v-for="(title,i) in permissions"
               :key="i"
             >
               <v-expansion-panel-header>
-                Item
+                {{ $t(title) }}
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
+                <v-checkbox
+                  v-for="(permission,i) in permissions[title]"
+                  :key="i"
+                  v-model="checked"
+                  :label="$t(`${title}_${permission[0]}`)"
+                  @change="addPermission(permission[1])"
+                >
+                </v-checkbox>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+          <div v-else>
+            <v-row>
+              <v-progress-circular indeterminate></v-progress-circular>
+            </v-row>
+          </div>
 
         </template>
         <template v-slot:card-actions>
@@ -38,6 +51,7 @@
             outlined
             plain
             type="success"
+            @click="createRole(body)"
           >
             {{ $t('create') }}
           </v-btn>
@@ -57,20 +71,46 @@ export default {
     body: {
       title: '',
       permissions: [],
-    }
+    },
+    checked: false,
+    errorMessage: '',
   }),
   mounted() {
     this.fetchPermissions();
   },
+  watch: {
+    errors: {
+      handler() {
+        try {
+          this.errorMessage = this.errors[0].title[0];
+        } catch (e) {
+          this.errorMessage = '';
+          this.title = '';
+        }
+      },
+      deep: true,
+    },
+  },
   computed: {
     ...mapGetters({
-      permissions: 'roles/permissions'
+      permissions: 'roles/permissions',
+      loading: 'roles/loading',
+      errors: 'roles/errors',
     }),
   },
   methods: {
     ...mapActions({
-      fetchPermissions: 'roles/fetchPermissions'
+      fetchPermissions: 'roles/fetchPermissions',
+      createRole: 'roles/createRole',
     }),
+    addPermission(permission) {
+      if (this.checked && !this.body.permissions.includes(permission)) {
+        this.body.permissions.push(permission)
+      } else {
+        this.body.permissions.splice(this.body.permissions.indexOf(permission), 1);
+      }
+      this.checked = false;
+    }
   }
 }
 </script>

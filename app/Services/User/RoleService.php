@@ -12,7 +12,19 @@ class RoleService
 {
     public function getAll(): Collection
     {
-        return Role::whereNotIn('name', ['admin'])->get();
+        $roles = collect([]);
+
+        Role::with(['permissions'])->whereNotIn('name', ['admin'])
+            ->get()
+            ->each(function ($item) use ($roles) {
+                $roles[] = [
+                    'id' => $item['id'],
+                    'name' => $item['name'],
+                    'permissions' => $item['permissions']->pluck('id')
+                ];
+            });
+
+        return $roles;
     }
 
     public function getPermissions(): Collection
@@ -25,10 +37,10 @@ class RoleService
         Role::create(['name' => $data['title']])
             ->syncPermissions(
                 Permission::whereIn(
-                    'name',
+                    'id',
                     $data['permissions']
                 )
-                    ->pluck('name')
+                    ->pluck('id')
             );
     }
 
@@ -36,7 +48,7 @@ class RoleService
     {
         $role = Role::update(['name' => $data['title']]);
 
-        $role->syncPermissions(Permission::whereIn('name', $data['permissions'])->get());
+        $role->syncPermissions(Permission::whereIn('id', $data['permissions'])->get());
     }
 
     public function delete(int $id): void

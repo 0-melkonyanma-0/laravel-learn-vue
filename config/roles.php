@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  *  Roles and permissions
  */
@@ -10,7 +12,6 @@ $models = [
     'departments',
     'roles',
     'events',
-    'posts',
     'statistics',
     'settlements',
 ];
@@ -25,7 +26,7 @@ $permissions = [
 
 return [
     'permissions' => [
-        array_fill_keys($models,$permissions)
+        array_fill_keys($models, $permissions)
     ],
 
 
@@ -37,12 +38,6 @@ return [
          */
 
         'admin' => [
-            'posts' => [
-                'index',
-                'create',
-                'edit',
-                'delete',
-            ],
             'users' => [
                 'index',
                 'create',
@@ -94,9 +89,6 @@ return [
          */
 
         'manager' => [
-            'posts' => [
-                'index',
-            ],
             'users' => [
                 'index',
             ],
@@ -122,9 +114,6 @@ return [
          */
 
         'employee' => [
-            'posts' => [
-                'index'
-            ],
             'events' => [
                 'index',
                 'show',

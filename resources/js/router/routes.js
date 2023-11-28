@@ -13,6 +13,7 @@ export default [
   {path: '/users/job-titles', name: 'users.job-titles', component: page('jobtitles/index.vue')},
   {path: '/users/roles', name: 'users.roles', component: page('roles/index.vue')},
   {path: '/users/roles/create', name: 'users.roles.create', component: page('roles/create.vue')},
+  {path: '/users/roles/:id/edit', name: 'users.roles.edit', component: page('roles/edit.vue')},
 
   {path: '/events/calendar', name: 'events.calendar', component: page('events/calendar.vue')},
   {path: '/events/statistics', name: 'events.statistics', component: page('events/statistics.vue')},

@@ -39,8 +39,8 @@
             <v-progress-linear color="red" indeterminate></v-progress-linear>
           </template>
           <template v-slot:item.actions="{item}">
-            <v-icon color="success" @click="editor(item)">mdi-pencil</v-icon>
-            <v-icon color="error" @click="deleteDepartment(item.id)">mdi-delete</v-icon>
+            <v-icon color="success" @click="$router.push(`roles/${item.id}/edit`)">mdi-pencil</v-icon>
+            <v-icon color="error" @click="deleteRole(item.id)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </template>
@@ -89,7 +89,7 @@ export default {
   methods: {
     ...mapActions({
       fetchRoles: 'roles/fetchRoles',
-      deleteRole: 'roles/deleteRoles',
+      deleteRole: 'roles/deleteRole',
     }),
   }
 }
