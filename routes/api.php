@@ -13,6 +13,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\User\DepartmentController;
 use App\Http\Controllers\User\JobTitleController;
+use App\Http\Controllers\User\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +44,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('job-titles', [JobTitleController::class, 'store']);
     Route::patch('job-titles/{id}', [JobTitleController::class, 'update']);
     Route::delete('job-titles/{id}', [JobTitleController::class, 'destroy']);
+
+    Route::get('roles', [RoleController::class, 'index']);
+    Route::post('roles', [RoleController::class, 'store']);
+    Route::patch('roles/{id}', [RoleController::class, 'update']);
+    Route::delete('roles/{id}', [RoleController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
