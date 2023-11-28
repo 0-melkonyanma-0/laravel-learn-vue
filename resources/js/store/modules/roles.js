@@ -9,7 +9,7 @@ export const state = {
 
 export const getters = {
   roles: state => state.roles,
-  permissions: state.permissions,
+  permissions: state => state.permissions,
   errors: state => state.errors,
   loading: state => state.loading,
 }
@@ -54,7 +54,26 @@ export const mutations = {
     state.loading = false
   },
   updatePermissions(state, permissions) {
-    state.permissions = permissions
+    permissions = permissions.map(permission => ({
+      id: permission.id,
+      name: permission.name,
+    }));
+
+    let permissionsGroup = [];
+
+    permissions.forEach(el => {
+      name = el.name.split(' ')
+
+      if (!permissionsGroup.includes(name)) {
+        permissionsGroup.push({name: [el]});
+      } else {
+        permissionsGroup[name].push(el);
+      }
+    });
+
+    console.log(permissionsGroup);
+
+    state.permissions = permissions;
   },
   permissions(state, roles) {
     state.roles = roles

@@ -49,7 +49,7 @@
 
 <script>
 import Card from "../../components/Card.vue";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   components: {Card},
@@ -59,6 +59,9 @@ export default {
       permissions: [],
     }
   }),
+  mounted() {
+    this.fetchPermissions();
+  },
   computed: {
     ...mapGetters({
       permissions: 'roles/permissions'
@@ -66,7 +69,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      
+      fetchPermissions: 'roles/fetchPermissions'
     }),
   }
 }
