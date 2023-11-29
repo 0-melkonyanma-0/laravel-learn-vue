@@ -27,10 +27,11 @@
                 <v-checkbox
                   v-for="(permission,i) in permissions[title]"
                   :key="i"
-                  v-model="checked"
+
                   :label="$t(`${title}_${permission[0]}`)"
                   :true-value="1"
                   @change="addPermission(permission[1])"
+                  v-model="checked"
                 >
                 </v-checkbox>
               </v-expansion-panel-content>
@@ -71,8 +72,8 @@ import {mapActions, mapGetters} from "vuex";
 export default {
   components: {Card},
   data: () => ({
-    checked: false,
     errorMessage: '',
+    checked: false,
   }),
   mounted() {
     this.fetchRolesAndPermissions();
@@ -117,6 +118,8 @@ export default {
       updateRole: 'roles/updateRole',
     }),
     addPermission(permission) {
+      console.log(permission);
+
       if (this.checked && !this.body.permissions.includes(permission)) {
         this.body.permissions.push(permission)
       } else {

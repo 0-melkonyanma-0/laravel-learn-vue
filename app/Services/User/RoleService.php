@@ -46,9 +46,8 @@ class RoleService
 
     public function update(array $data, int $id): void
     {
-        $role = Role::update(['name' => $data['title']]);
-
-        $role->syncPermissions(Permission::whereIn('id', $data['permissions'])->get());
+        $role = Role::find($id)->syncPermissions(Permission::whereIn('id', $data['permissions'])->get());
+        $role->update(['name' => $data['title']]);
     }
 
     public function delete(int $id): void
