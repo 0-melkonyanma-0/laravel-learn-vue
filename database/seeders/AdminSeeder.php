@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\SexType;
 use App\Models\User\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,7 @@ class AdminSeeder extends Seeder
             'name' => 'Admin',
 //                'username' => 'super.user.admin',
             'email' => 'margar.melkonyan@bk.ru',
+            'sex' => SexType::MALE,
             'password' => bcrypt('margar.melkonyan@bk.ru'),
 //                'is_active' => 1,
         ])->assignRole('admin');

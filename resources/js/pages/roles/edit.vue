@@ -13,11 +13,9 @@
             type="text"
           ></v-text-field>
 
-          {{ body.permissions }}
-
           <v-expansion-panels v-if="!loading">
             <v-expansion-panel
-              v-for="(title,i) in permissions"
+              v-for="(title,i) in processedPermissions"
               :key="i"
             >
               <v-expansion-panel-header>
@@ -25,13 +23,12 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-checkbox
-                  v-for="(permission,i) in permissions[title]"
+                  v-for="(permission,i) in processedPermissions[title]"
                   :key="i"
-
-                  :label="$t(`${title}_${permission[0]}`)"
+                  v-model="permission.checked"
+                  :label="$t(`${permission.title}`)"
                   :true-value="1"
-                  @change="addPermission(permission[1])"
-                  v-model="checked"
+                  @change="addPermission(permission.id, permission.checked)"
                 >
                 </v-checkbox>
               </v-expansion-panel-content>
@@ -45,7 +42,6 @@
               </v-flex>
             </v-layout>
           </div>
-
         </template>
 
         <template v-slot:card-actions>
@@ -57,7 +53,7 @@
             type="success"
             @click="updateRole(body)"
           >
-            {{ $t('editing') }}
+            {{ $t('update') }}
           </v-btn>
         </template>
       </card>
@@ -100,10 +96,29 @@ export default {
           id: role.id,
           title: role.name,
           permissions: role.permissions,
-        }
-      } catch (e) {}
+        };
+      } catch (e) {
+        console.log('[wait]');
+      }
     },
+    processedPermissions() {
+      let processedPermissions = [];
 
+      this.permissions.map((name, i) => {
+        processedPermissions.push(name);
+        processedPermissions[name] = []
+
+        this.permissions[name].map((item) => {
+          if (!this.body.permissions.includes(item.id)) {
+            processedPermissions[name].push({...item, checked: false});
+          } else {
+            processedPermissions[name].push({...item, checked: true});
+          }
+        })
+      });
+
+      return processedPermissions;
+    },
     ...mapGetters({
       roles: 'roles/roles',
       permissions: 'roles/permissions',
@@ -117,15 +132,14 @@ export default {
       createRole: 'roles/createRole',
       updateRole: 'roles/updateRole',
     }),
-    addPermission(permission) {
-      console.log(permission);
-
-      if (this.checked && !this.body.permissions.includes(permission)) {
+    addPermission(permission, checked) {
+      if (checked && !this.body.permissions.includes(permission)) {
         this.body.permissions.push(permission)
+        checked = true;
       } else {
         this.body.permissions.splice(this.body.permissions.indexOf(permission), 1);
+        checked = false;
       }
-      this.checked = false;
     }
   }
 }

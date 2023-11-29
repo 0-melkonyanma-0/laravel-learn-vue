@@ -20,7 +20,7 @@
           type="success"
           @click="updateJobTitle(body)"
       >
-        {{ $t('editing') }}
+        {{ $t('update') }}
       </v-btn>
     </template>
   </card>

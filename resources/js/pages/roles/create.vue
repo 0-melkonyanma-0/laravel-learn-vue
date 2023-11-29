@@ -26,8 +26,9 @@
                   v-for="(permission,i) in permissions[title]"
                   :key="i"
                   v-model="checked"
-                  :label="$t(`${title}_${permission[0]}`)"
-                  @change="addPermission(permission[1])"
+                  :label="$t(`${permission.title}`)"
+                  :true-value="1"
+                  @change="addPermission(permission.id)"
                 >
                 </v-checkbox>
               </v-expansion-panel-content>

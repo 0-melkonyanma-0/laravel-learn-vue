@@ -7,10 +7,13 @@ import vuetify from '~/plugins/vuetify'
 
 import '~/plugins'
 import '~/components'
+import permissions from './mixins/permissions'
 
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+Vue.mixin(permissions)
+
 new Vue({
   vuetify,
   i18n,

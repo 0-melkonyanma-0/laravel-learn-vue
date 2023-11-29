@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Models\OAuthProvider;
-use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
+use App\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Permission;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -27,6 +31,8 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         LogsActivity;
 
     protected static array $recordEvents = ['updated'];
+
+    protected $with = ['department', 'job_title'];
 
     protected $fillable = [
         'name',
@@ -42,6 +48,10 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'department_id',
+        'job_title_id',
     ];
 
     protected $casts = [
@@ -52,11 +62,37 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'photo_url',
     ];
 
-    public function password(): Attribute
+    public function password()
     {
         return Attribute::make(
             set: fn($password) => Hash::make($password),
         );
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function job_title(): BelongsTo
+    {
+        return $this->belongsTo(JobTitle::class);
+    }
+
+    //    public function events(): HasMany
+//    {
+//        return $this->hasMany(Event::class);
+//    }
+
+    public function getAllPermissionsAttribute()
+    {
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+                $permissions[] = $permission->name;
+            }
+        }
+        return $permissions;
     }
 
     public function getPhotoUrlAttribute(): string
