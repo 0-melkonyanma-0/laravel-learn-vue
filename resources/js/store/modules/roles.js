@@ -15,14 +15,12 @@ export const getters = {
 }
 
 export const actions = {
-  fetchRoles(ctx) {
+  fetchRolesAndPermissions(ctx) {
     ctx.commit('loading');
     axios.get('/api/roles').then((response) => {
       ctx.commit('updateRoles', response.data);
     });
-  },
-  fetchPermissions(ctx) {
-    ctx.commit('loading');
+
     axios.get('/api/roles/permissions').then((response) => {
       ctx.commit('updatePermissions', response.data)
     });

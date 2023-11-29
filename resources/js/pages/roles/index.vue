@@ -73,7 +73,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchRoles();
+    this.fetchRolesAndPermissions();
   },
   watch: {
     dialogOn: {
@@ -88,7 +88,7 @@ export default {
   }),
   methods: {
     ...mapActions({
-      fetchRoles: 'roles/fetchRoles',
+      fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
       deleteRole: 'roles/deleteRole',
     }),
   }

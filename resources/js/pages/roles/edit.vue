@@ -15,8 +15,6 @@
 
           {{ body.permissions }}
 
-          <v-divider/>
-
           <v-expansion-panels v-if="!loading">
             <v-expansion-panel
               v-for="(title,i) in permissions"
@@ -31,6 +29,7 @@
                   :key="i"
                   v-model="checked"
                   :label="$t(`${title}_${permission[0]}`)"
+                  :true-value="1"
                   @change="addPermission(permission[1])"
                 >
                 </v-checkbox>
@@ -38,12 +37,13 @@
             </v-expansion-panel>
           </v-expansion-panels>
           <div v-else>
-            <v-row>
-              <v-progress-circular indeterminate></v-progress-circular>
-            </v-row>
+            <v-layout align-center column fill-height justify-center>
+              <v-flex align-center row>
+                <v-progress-circular :size="20" color="success" indeterminate>
+                </v-progress-circular>
+              </v-flex>
+            </v-layout>
           </div>
-
-          {{ $route.params.id }}
 
         </template>
 
@@ -75,7 +75,7 @@ export default {
     errorMessage: '',
   }),
   mounted() {
-    this.fetchPermissions();
+    this.fetchRolesAndPermissions();
   },
   watch: {
     errors: {
@@ -92,12 +92,15 @@ export default {
   },
   computed: {
     body() {
-      return {
-        id: this.$route.params.id,
-        title: '',
-        // title: this.permissions[this.$route.params.id].title,
-        permissions: [],
-      }
+      try {
+        let role = this.roles.filter((el) => Number(el.id) === Number(this.$route.params.id))[0];
+
+        return {
+          id: role.id,
+          title: role.name,
+          permissions: role.permissions,
+        }
+      } catch (e) {}
     },
 
     ...mapGetters({
@@ -109,7 +112,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      fetchPermissions: 'roles/fetchPermissions',
+      fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
       createRole: 'roles/createRole',
       updateRole: 'roles/updateRole',
     }),

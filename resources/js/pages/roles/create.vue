@@ -13,10 +13,6 @@
             type="text"
           ></v-text-field>
 
-          {{ body.permissions }}
-
-          <v-divider/>
-
           <v-expansion-panels v-if="!loading">
             <v-expansion-panel
               v-for="(title,i) in permissions"
@@ -38,9 +34,12 @@
             </v-expansion-panel>
           </v-expansion-panels>
           <div v-else>
-            <v-row>
-              <v-progress-circular indeterminate></v-progress-circular>
-            </v-row>
+            <v-layout align-center column fill-height justify-center>
+              <v-flex align-center row>
+                <v-progress-circular :size="20" color="success" indeterminate>
+                </v-progress-circular>
+              </v-flex>
+            </v-layout>
           </div>
 
         </template>
@@ -76,7 +75,7 @@ export default {
     errorMessage: '',
   }),
   mounted() {
-    this.fetchPermissions();
+    this.fetchRolesAndPermissions();
   },
   watch: {
     errors: {
@@ -100,7 +99,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      fetchPermissions: 'roles/fetchPermissions',
+      fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
       createRole: 'roles/createRole',
     }),
     addPermission(permission) {
