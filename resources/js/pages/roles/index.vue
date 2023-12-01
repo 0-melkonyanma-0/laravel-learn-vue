@@ -4,6 +4,7 @@
       <template v-slot:card-title>
         <div class="ml-2"></div>
         <v-btn
+          v-if="$can('create roles')"
           color="primary"
           rounded
           @click="$router.push({name: 'users.roles.create' })"
@@ -39,8 +40,10 @@
             <v-progress-linear color="red" indeterminate></v-progress-linear>
           </template>
           <template v-slot:item.actions="{item}">
-            <v-icon color="success" @click="$router.push(`roles/${item.id}/edit`)">mdi-pencil</v-icon>
-            <v-icon color="error" @click="deleteRole(item.id)">mdi-delete</v-icon>
+            <v-icon v-if="$can('edit roles')" color="success" @click="$router.push(`roles/${item.id}/edit`)">
+              mdi-pencil
+            </v-icon>
+            <v-icon v-if="$can('delete roles')" color="error" @click="deleteRole(item.id)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </template>
@@ -66,17 +69,22 @@ export default {
     }),
 
     rolesTableHeader() {
-      return [
+      let header = [
         {text: this.$t('title'), value: 'name', sortable: true},
-        {text: this.$t('actions'), value: 'actions', align: 'end', sortable: false}
-      ]
+      ];
+
+      if (this.$can('edit roles') || this.$can('delete roles')) {
+        header.push({text: this.$t('actions'), value: 'actions', align: 'end', sortable: false});
+      }
+
+      return header;
     },
   },
   mounted() {
     this.fetchRolesAndPermissions();
   },
-  metaInfo () {
-    return { title: this.$t('roles') }
+  metaInfo() {
+    return {title: this.$t('roles')}
   },
   watch: {
     dialogOn: {

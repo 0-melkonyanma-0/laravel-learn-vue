@@ -33,7 +33,6 @@ export const actions = {
   createUser(ctx, body) {
     axios.post('/api/users', {...body}).then((response) => {
       ctx.dispatch('fetchUsers');
-      body = {};
       ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
@@ -47,7 +46,7 @@ export const mutations = {
     state.loading = false
   },
   deleteUser(state, userId) {
-    state.users = state.users.filter((dep) => dep.id !== userId)
+    state.users = state.users.filter((user) => user.id !== userId)
   },
   setErrors(state, err) {
     state.errors = [err]

@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     groups() {
-      return [
+      let sideMenu = [
         {
           groupName: this.$t('users'),
           icon: 'mdi-account-multiple-outline',
@@ -84,7 +84,9 @@ export default {
             {name: this.$t('cities'), path: {name: 'settlements.cities'}},
           ]
         }
-      ]
+      ];
+
+      return sideMenu;
     }
   }
 }

@@ -26,7 +26,8 @@ $appCss = mix('dist/css/app.css');
   <script>
     window.config = @json($config);
     @auth
-    window.Permissions = {!! json_encode(Auth::user()->allPermissions, true)!!};
+      const Permissions = {!! json_encode(Auth::user()->allPermissions, true)!!};
+      Object.freeze(Permissions);
     @else
     //window.Permissions = [];
     @endauth

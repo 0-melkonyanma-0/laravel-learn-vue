@@ -4,6 +4,7 @@
       <template v-slot:card-title>
         <div class="ml-2"></div>
         <v-btn
+          v-if="$can('create users')"
           color="primary"
           rounded
           @click="$router.push({name: 'users.create' })"
@@ -66,8 +67,10 @@
             </v-chip>
           </template>
           <template v-slot:item.actions="{item}">
-            <v-icon color="success" @click="$router.push(`users/${item.id}/edit`)">mdi-pencil</v-icon>
-            <v-icon color="error" @click="deleteRole(item.id)">mdi-delete</v-icon>
+            <v-icon v-if="$can('edit users')" color="success" @click="$router.push(`users/${item.id}/edit`)">
+              mdi-pencil
+            </v-icon>
+            <v-icon v-if="$can('delete users')" color="error" @click="deleteRole(item.id)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </template>
@@ -92,14 +95,19 @@ export default {
     }),
 
     rolesTableHeader() {
-      return [
+      let header = [
         {text: this.$t('name'), value: 'name', sortable: true},
         {text: this.$t('sex'), value: 'sex', sortable: true},
         {text: this.$t('departments'), value: 'departments', sortable: true},
         {text: this.$t('job_titles'), value: 'job_titles', sortable: true},
         {text: this.$t('Status'), value: 'status', sortable: true},
-        {text: this.$t('actions'), value: 'actions', align: 'end', sortable: false}
-      ]
+      ];
+
+      if (this.$can('edit users') || this.$can('delete users')) {
+        header.push({text: this.$t('actions'), value: 'actions', align: 'end', sortable: false});
+      }
+
+      return header;
     },
   },
   mounted() {
@@ -116,8 +124,8 @@ export default {
     search: '',
     editItem: {},
   }),
-  metaInfo () {
-    return { title: this.$t('users') }
+  metaInfo() {
+    return {title: this.$t('users')}
   },
   methods: {
     ...mapActions({
