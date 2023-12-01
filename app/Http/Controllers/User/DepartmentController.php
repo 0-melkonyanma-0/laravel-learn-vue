@@ -26,6 +26,11 @@ class DepartmentController extends Controller
         return $this->departmentService->getAll();
     }
 
+    public function show(int $id): Collection
+    {
+        return $this->departmentService->show($id);
+    }
+
     public function store(DepartmentStoreRequest $request): JsonResponse
     {
         $this->departmentService->save($request->validated());

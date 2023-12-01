@@ -21,11 +21,13 @@ export const actions = {
     axios.get('/api/roles/permissions').then((response) => {
       ctx.commit('updatePermissions', response.data)
     });
-  }, deleteRole(ctx, id) {
+  },
+  deleteRole(ctx, id) {
     axios.delete(`/api/roles/${id}`).then(() => {
       ctx.commit('deleteRole', id)
     });
-  }, updateRole(ctx, role) {
+  },
+  updateRole(ctx, role) {
     axios.patch(`/api/roles/${role.id}`, role).then(() => {
       window.location.href = '/users/roles';
       ctx.dispatch('fetchRolesAndPermissions');

@@ -26,6 +26,11 @@ class JobTitleController extends Controller
         return $this->jobTitleService->getAll();
     }
 
+    public function show(int $id): Collection
+    {
+        return $this->jobTitleService->show($id);
+    }
+
     public function store(JobTitleStoreRequest $request): JsonResponse
     {
         $this->jobTitleService->save($request->validated());

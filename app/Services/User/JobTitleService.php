@@ -14,6 +14,11 @@ class JobTitleService
         return JobTitle::all();
     }
 
+    public function show(int $id): Collection
+    {
+        return JobTitle::whereId($id)->get();
+    }
+
     public function update(array $data, int $id): void
     {
         JobTitle::find($id)->update($data);

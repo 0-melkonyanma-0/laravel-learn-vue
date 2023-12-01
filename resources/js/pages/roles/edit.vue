@@ -1,7 +1,16 @@
 <template>
   <v-container>
     <v-form @submit.prevent="false">
-      <card :title="$t('edit')">
+      <v-card v-if="loading" height="800">
+        <v-card-text>
+          <v-sheet
+            color="lighten-4"
+          >
+            <v-skeleton-loader class="mx-auto" max-height="200" type="article"></v-skeleton-loader>
+          </v-sheet>
+        </v-card-text>
+      </v-card>
+      <card v-else :title="$t('edit')">
         <template v-slot:card-text>
           <v-text-field
             v-model="body.title"

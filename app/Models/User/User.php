@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Models\OAuthProvider;
-use App\Notifications\VerifyEmail;
-use Spatie\Activitylog\LogOptions;
 use App\Notifications\ResetPassword;
+use App\Notifications\VerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Models\Permission;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -38,6 +38,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'name',
         'username',
         'sex',
+        'status',
         'department_id',
         'job_title_id',
         'is_active',
@@ -50,8 +51,6 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'remember_token',
         'created_at',
         'updated_at',
-        'department_id',
-        'job_title_id',
     ];
 
     protected $casts = [
@@ -62,11 +61,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'photo_url',
     ];
 
-    public function password()
+    public function setPasswordAttribute(string $value): void
     {
-        return Attribute::make(
-            set: fn($password) => Hash::make($password),
-        );
+        $this->attributes['password'] = Hash::make($value);
     }
 
     public function department(): BelongsTo

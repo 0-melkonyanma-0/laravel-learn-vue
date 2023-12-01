@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 use Laravel\Dusk\DuskServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->runningUnitTests()) {
             Schema::defaultStringLength(191);
         }
+
+        Password::defaults(function () {
+            $rule = Password::min(8);
+            return $this->app->isProduction()
+                ? $rule->mixedCase()->symbols()->numbers()->uncompromised(3)
+                : $rule;
+        });
     }
 
     /**

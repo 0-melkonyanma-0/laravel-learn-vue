@@ -25,6 +25,11 @@ class RoleController extends Controller
         return $this->roleService->getAll();
     }
 
+    public function show(int $id): Collection
+    {
+        return $this->roleService->show($id);
+    }
+
     public function getPermissions(): Collection
     {
         return $this->roleService->getPermissions();

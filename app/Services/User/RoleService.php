@@ -27,6 +27,11 @@ class RoleService
         return $roles;
     }
 
+    public function show(int $id): Collection
+    {
+        return Role::whereNotIn('name', ['admin'])->get()->where('id', $id);
+    }
+
     public function getPermissions(): Collection
     {
         return Permission::all();

@@ -32,27 +32,27 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('user', [UserController::class, 'current']);
     Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
     Route::post('users', [UserController::class, 'store']);
     Route::patch('users/{id}', [UserController::class, 'update']);
     Route::delete('users/{id}', [UserController::class, 'destroy']);
-    Route::get('users/edit-data', [UserController::class, 'getDataForEditForm']);
-
-
-    Route::patch('settings/profile', [ProfileController::class, 'update']);
-    Route::patch('settings/password', [PasswordController::class, 'update']);
+    Route::get('users-edit-data', [UserController::class, 'getDataForEditForm']);
 
     Route::get('departments', [DepartmentController::class, 'index']);
+    Route::get('departments/{id}', [DepartmentController::class, 'show']);
     Route::post('departments', [DepartmentController::class, 'store']);
     Route::patch('departments/{id}', [DepartmentController::class, 'update']);
     Route::delete('departments/{id}', [DepartmentController::class, 'destroy']);
 
     Route::get('job-titles', [JobTitleController::class, 'index']);
+    Route::get('job-titles/{id}', [JobTitleController::class, 'show']);
     Route::post('job-titles', [JobTitleController::class, 'store']);
     Route::patch('job-titles/{id}', [JobTitleController::class, 'update']);
     Route::delete('job-titles/{id}', [JobTitleController::class, 'destroy']);
 
     Route::get('roles', [RoleController::class, 'index']);
     Route::get('roles/permissions', [RoleController::class, 'getPermissions']);
+    Route::get('roles/{id}', [RoleController::class, 'show']);
     Route::post('roles', [RoleController::class, 'store']);
     Route::patch('roles/{id}', [RoleController::class, 'update']);
     Route::delete('roles/{id}', [RoleController::class, 'destroy']);

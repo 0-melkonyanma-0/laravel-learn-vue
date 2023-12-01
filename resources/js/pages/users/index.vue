@@ -6,7 +6,7 @@
         <v-btn
           color="primary"
           rounded
-          @click="$router.push({name: 'users.roles.create' })"
+          @click="$router.push({name: 'users.create' })"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -43,7 +43,7 @@
           </template>
           <template v-slot:item.departments="{item}">
             <span v-if="item.department">
-              {{ item.department }}
+              {{ item.department.title }}
             </span>
             <span v-else>
               {{ $t('not_indicated') }}
@@ -51,7 +51,7 @@
           </template>
           <template v-slot:item.job_titles="{item}">
             <span v-if="item.job_title">
-              {{ item.job_title }}
+              {{ item.job_title.title }}
             </span>
             <span v-else>
               {{ $t('not_indicated') }}
@@ -84,7 +84,6 @@ import Edit from "./edit.vue";
 export default {
   name: "index.vue",
   components: {Edit, Create, Card},
-  middleware: 'admin',
   computed: {
     ...mapGetters({
       users: 'users/users',

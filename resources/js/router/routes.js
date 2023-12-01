@@ -7,6 +7,7 @@ export default [
   {path: '/home', name: 'home', component: page('home.vue')},
 
   {path: '/users', name: 'users.index', component: page('users/index.vue'),},
+  {path: '/users/create', name: 'users.create', component: page('users/create.vue')},
   {path: '/users/:id/edit', name: 'users.edit', component: page('users/edit.vue'),},
 
   {path: '/users/departments', name: 'users.departments', component: page('departments/index.vue')},

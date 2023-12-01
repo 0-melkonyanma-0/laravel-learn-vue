@@ -15,7 +15,7 @@ export const getters = {
 export const actions = {
   fetchUsers(ctx) {
     axios.get('/api/users').then((response) => {
-      ctx.commit('updateUsers', response.data);
+      ctx.commit('updateUsers', Object.values(response.data));
     })
   },
   deleteUser(ctx, id) {
@@ -23,8 +23,8 @@ export const actions = {
       ctx.commit('deleteUser', id)
     });
   },
-  updateUser(ctx, department) {
-    axios.patch(`/api/users/${department.id}`, department).then(() => {
+  updateUser(ctx, user) {
+    axios.patch(`/api/users/${user.id}`, user).then(() => {
       ctx.dispatch('fetchUsers');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
@@ -33,7 +33,7 @@ export const actions = {
   createUser(ctx, body) {
     axios.post('/api/users', {...body}).then((response) => {
       ctx.dispatch('fetchUsers');
-      body.title = '';
+      body = {};
       ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
@@ -43,7 +43,7 @@ export const actions = {
 
 export const mutations = {
   updateUsers(state, users) {
-    state.users = users
+    state.users = users;
     state.loading = false
   },
   deleteUser(state, userId) {

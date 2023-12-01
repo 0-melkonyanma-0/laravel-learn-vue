@@ -14,6 +14,11 @@ class DepartmentService
         return Department::all();
     }
 
+    public function show(int $id): Collection
+    {
+        return Department::whereId($id)->get();
+    }
+
     public function update(array $data, int $id): void
     {
         Department::find($id)->update($data);

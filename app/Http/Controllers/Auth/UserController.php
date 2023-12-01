@@ -34,6 +34,11 @@ class UserController extends Controller
         return $this->userService->getAll();
     }
 
+    public function show(int $id): Collection
+    {
+        return $this->userService->show($id);
+    }
+
     public function store(UserStoreRequest $request): JsonResponse
     {
         $this->userService->store($request->validated());

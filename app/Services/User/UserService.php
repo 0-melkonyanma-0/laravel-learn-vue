@@ -16,7 +16,14 @@ class UserService
 {
     public function getAll(): Collection
     {
-        return User::all();
+        return User::all()->reject(function (User $value, int $key) {
+            return in_array('admin', $value->roles()->pluck('name')->toArray(), true);
+        });
+    }
+
+    public function show(int $id): Collection
+    {
+        return User::whereId($id)->with(['roles'])->get();
     }
 
     public function store(array $data): void
@@ -26,7 +33,22 @@ class UserService
 
     public function update(array $data, int $id): void
     {
-        User::find($id)->update($data);
+        $user = User::find($id);
+
+        if (!isset($data['password'])) {
+            $user->update([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'sex' => $data['sex'],
+                'status' => $data['status'],
+                'job_title_id' => isset($data['job_title_id']) ? $data['job_title_id'] : null,
+                'department_id' => isset($data['department_id']) ? $data['department_id'] : null,
+            ]);
+        } else {
+            $user->update($data);
+        }
+
+        $user->syncRoles($data['role']);
     }
 
     public function delete(int $id): void
@@ -39,7 +61,7 @@ class UserService
         return collect(
             [
                 'genders' => SexType::getValues(),
-                'roles' => Role::all()->toArray(),
+                'roles' => Role::whereNotIn('name', ['admin'])->get()->toArray(),
                 'departments' => Department::all()->toArray(),
                 'job_titles' => JobTitle::all()->toArray(),
                 'statuses' => StatusType::getValues(),
