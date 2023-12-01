@@ -82,6 +82,9 @@ export default {
   mounted() {
     this.fetchRolesAndPermissions();
   },
+  metaInfo() {
+    return {title: this.$t('edit')}
+  },
   watch: {
     errors: {
       handler() {

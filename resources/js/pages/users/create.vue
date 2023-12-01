@@ -145,6 +145,9 @@ export default {
       createUser: 'users/createUser',
     }),
   },
+  metaInfo() {
+    return {title: this.$t('create')}
+  },
   computed: {},
   mounted() {
     axios.get('/api/users-edit-data').then((response) => {

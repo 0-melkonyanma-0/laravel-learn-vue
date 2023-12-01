@@ -79,6 +79,9 @@ export default {
   mounted() {
     this.fetchRolesAndPermissions();
   },
+  metaInfo() {
+    return {title: this.$t('create')}
+  },
   watch: {
     errors: {
       handler() {

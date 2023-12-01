@@ -148,6 +148,9 @@ export default {
       updateUser: 'users/updateUser',
     }),
   },
+  metaInfo() {
+    return {title: this.$t('edit')}
+  },
   computed: {},
   mounted() {
     axios.get(`/api/users/${this.$route.params.id}`).then((response) => {
