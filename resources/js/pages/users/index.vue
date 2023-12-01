@@ -116,6 +116,9 @@ export default {
     search: '',
     editItem: {},
   }),
+  metaInfo () {
+    return { title: this.$t('users') }
+  },
   methods: {
     ...mapActions({
       fetchUsers: 'users/fetchUsers',

@@ -75,6 +75,9 @@ export default {
   mounted() {
     this.fetchRolesAndPermissions();
   },
+  metaInfo () {
+    return { title: this.$t('roles') }
+  },
   watch: {
     dialogOn: {
       handler() {

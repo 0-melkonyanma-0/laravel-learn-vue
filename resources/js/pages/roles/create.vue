@@ -1,7 +1,16 @@
 <template>
   <v-container>
     <v-form @submit.prevent="false">
-      <card :title="$t('create')">
+      <v-card v-if="loading" height="800">
+        <v-card-text>
+          <v-sheet
+            color="lighten-4"
+          >
+            <v-skeleton-loader class="mx-auto" max-height="200" type="article"></v-skeleton-loader>
+          </v-sheet>
+        </v-card-text>
+      </v-card>
+      <card v-else :title="$t('create')">
         <template v-slot:card-text>
           <v-text-field
             v-model="body.title"
@@ -34,14 +43,6 @@
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
-          <div v-else>
-            <v-layout align-center column fill-height justify-center>
-              <v-flex align-center row>
-                <v-progress-circular :size="20" color="success" indeterminate>
-                </v-progress-circular>
-              </v-flex>
-            </v-layout>
-          </div>
 
         </template>
         <template v-slot:card-actions>

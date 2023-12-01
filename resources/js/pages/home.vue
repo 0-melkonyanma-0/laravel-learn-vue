@@ -1,16 +1,9 @@
 <template>
-  <div class="row">
-    <div class="col-lg-10 m-auto">
-<!--      <card :title="$t('home')">-->
-<!--        <v-card>-->
-<!--          test-->
-<!--        </v-card>-->
-<!--      </card>-->
-      <v-card>
-        {{ $t('you_are_logged_in') }}
-      </v-card>
-    </div>
-  </div>
+  <v-container>
+    <v-card class="pa-4">
+      {{ $t('you_are_logged_in') }}
+    </v-card>
+  </v-container>
 </template>
 
 <script>

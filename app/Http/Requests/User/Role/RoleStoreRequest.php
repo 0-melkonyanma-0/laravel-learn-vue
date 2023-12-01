@@ -18,7 +18,8 @@ class RoleStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'bail', 'max:255', 'unique:roles,name'],
-            'permissions.*' => ['required', 'integer', 'bail', 'exists:permissions,id'],
+            'permissions' => ['required', 'array', 'min:1'],
+            'permissions.*' => ['required', 'numeric', 'bail', 'exists:permissions,id'],
         ];
     }
 }

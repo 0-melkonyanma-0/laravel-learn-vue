@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form @submit.prevent="false">
+    <v-form @submit.prevent="updateRole(body)">
       <v-card v-if="loading" height="800">
         <v-card-text>
           <v-sheet
@@ -59,8 +59,7 @@
             color="success"
             outlined
             plain
-            type="success"
-            @click="updateRole(body)"
+            type="submit"
           >
             {{ $t('update') }}
           </v-btn>
@@ -104,7 +103,7 @@ export default {
         return {
           id: role.id,
           title: role.name,
-          permissions: role.permissions,
+          permissions: role.permissions.length ? role.permissions : [],
         };
       } catch (e) {
         console.log('[wait]');

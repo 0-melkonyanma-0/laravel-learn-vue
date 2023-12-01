@@ -29,13 +29,13 @@ export const actions = {
   },
   updateRole(ctx, role) {
     axios.patch(`/api/roles/${role.id}`, role).then(() => {
-      window.location.href = '/users/roles';
+      // window.location.href = '/users/roles';
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
     });
   }, createRole(ctx, body) {
-    window.location.href = '/users/roles';
+    // window.location.href = '/users/roles';
 
     axios.post('/api/roles', {...body}).then((response) => {
       body.title = '';

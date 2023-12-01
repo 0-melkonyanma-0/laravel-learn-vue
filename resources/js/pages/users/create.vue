@@ -98,12 +98,16 @@
             v-model="currentUser.password"
             :label="$t('password')"
             dense
-            outlined></v-text-field>
+            outlined
+            type="password"
+          ></v-text-field>
           <v-text-field
             v-model="currentUser.password_confirmation"
             :label="$t('confirm_password')"
             dense
-            outlined></v-text-field>
+            outlined
+            type="password"
+          ></v-text-field>
         </template>
         <template
           v-slot:card-actions

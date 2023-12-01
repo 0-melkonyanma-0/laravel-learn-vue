@@ -86,6 +86,9 @@ export default {
       ]
     },
   },
+  metaInfo () {
+    return { title: this.$t('job_titles') }
+  },
   mounted() {
     this.fetchJobTitles();
   },

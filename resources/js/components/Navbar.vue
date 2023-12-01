@@ -6,13 +6,14 @@
     >
       <v-app-bar-nav-icon
         @click="drawer = !drawer"
+        v-if="user"
       >
       </v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-btn plain>
         <locale-dropdown/>
       </v-btn>
-      <v-menu offset-y>
+      <v-menu offset-y v-if="user">
         <template v-slot:activator="{ on, attrs }">
           <v-badge
             bordered
@@ -55,6 +56,7 @@ import {mapGetters} from 'vuex'
 import LocaleDropdown from './LocaleDropdown'
 import Drawer from "./Drawer.vue";
 import MenuButton from "./MenuButton.vue";
+import auth from "../middleware/auth";
 
 export default {
   components: {
@@ -73,6 +75,7 @@ export default {
   }),
 
   methods: {
+    auth,
     async logout() {
       // Log out the user.
       await this.$store.dispatch('auth/logout')

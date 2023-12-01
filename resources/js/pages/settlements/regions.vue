@@ -6,7 +6,9 @@
 
 <script>
 export default {
-
+  metaInfo () {
+    return { title: this.$t('regions') }
+  }
 }
 </script>
 

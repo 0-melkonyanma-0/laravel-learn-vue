@@ -39,6 +39,8 @@ class RoleService
 
     public function store(array $data): void
     {
+//        dd($data);
+
         Role::create(['name' => $data['title']])
             ->syncPermissions(
                 Permission::whereIn(
