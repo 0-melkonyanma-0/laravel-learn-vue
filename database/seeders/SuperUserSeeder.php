@@ -10,7 +10,7 @@ use App\Models\User\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AdminSeeder extends Seeder
+class SuperUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -24,7 +24,7 @@ class AdminSeeder extends Seeder
             'status' => StatusType::ACTIVE,
             'sex' => SexType::MALE,
             'email' => 'margar.melkonyan@bk.ru',
-            'password' => bcrypt('margar.melkonyan@bk.ru'),
+            'password' =>'margar.melkonyan@bk.ru',
 //                'is_active' => 1,
         ])->assignRole('admin');
 

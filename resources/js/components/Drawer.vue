@@ -17,7 +17,7 @@
     </v-list>
     <v-list v-for="group in groups" :key="group.groupName" shaped>
       <v-subheader v-if="group.show" v-show="!drawer">{{ group.groupName }}</v-subheader>
-      <v-list-group class="pr-4">
+      <v-list-group v-if="group.show" class="pr-4">
         <template v-slot:activator>
           <v-list-item-avatar class="pr-4">
             <v-icon>
@@ -86,6 +86,7 @@ export default {
         {
           groupName: this.$t('settlements'),
           icon: 'mdi-home-city-outline',
+          show: (this.$can('index settlements')),
           children: [
             {name: this.$t('regions'), path: {name: 'settlements.regions'}, show: this.$can('index settlements')},
             {name: this.$t('cities'), path: {name: 'settlements.cities'}, show: this.$can('index settlements')},

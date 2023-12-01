@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\User\Department;
+use App\Models\User\User;
 use App\Models\User\JobTitle;
-use Doctrine\DBAL\Query\QueryException;
-use Illuminate\Database\Seeder;
 use PharIo\Version\Exception;
+use App\Models\User\Department;
+use Illuminate\Database\Seeder;
+use Doctrine\DBAL\Query\QueryException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,8 +20,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-        Department::factory(20)->create();
-        JobTitle::factory(20)->create();
+        User::factory(1000)->create();
+        // Department::factory(20)->create();
+        // JobTitle::factory(20)->create();
     }
 }
