@@ -25,12 +25,6 @@ $appCss = mix('dist/css/app.css');
 
   <script>
     window.config = @json($config);
-    @auth
-      const Permissions = {!! json_encode(Auth::user()->allPermissions, true)!!};
-      Object.freeze(Permissions);
-    @else
-    //window.Permissions = [];
-    @endauth
   </script>
 
   <script src="{{ (str_starts_with($appJs, '//') ? 'http:' : '').$appJs }}"></script>

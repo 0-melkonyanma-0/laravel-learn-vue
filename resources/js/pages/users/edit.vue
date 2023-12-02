@@ -135,14 +135,11 @@
 import Card from "../../components/Card.vue";
 import axios from "axios";
 import {mapActions} from "vuex";
+import user from "../../mixins/user";
 
 export default {
   components: {Card},
-  data: () => ({
-    currentUser: {},
-    editFormSelectionItems: [],
-    loading: true,
-  }),
+  mixins: [user],
   methods: {
     ...mapActions({
       updateUser: 'users/updateUser',
@@ -151,7 +148,6 @@ export default {
   metaInfo() {
     return {title: this.$t('edit')}
   },
-  computed: {},
   mounted() {
     axios.get(`/api/users/${this.$route.params.id}`).then((response) => {
       this.currentUser = {
@@ -163,11 +159,6 @@ export default {
       delete this.currentUser.job_title;
       delete this.currentUser.department;
     });
-
-    axios.get('/api/users-edit-data').then((response) => {
-      this.editFormSelectionItems = response.data;
-      this.loading = false;
-    })
   },
 }
 </script>

@@ -13,6 +13,8 @@ export default (to, from, next, roles) => {
   // Split roles into an array
   roles = roles.split(',')
 
+  console.log(roles)
+
   // Check if the user has one of the required roles...
   if (!roles.includes(user.role)) {
     next('/unauthorized')

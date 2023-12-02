@@ -130,16 +130,12 @@
 
 <script>
 import Card from "../../components/Card.vue";
-import axios from "axios";
 import {mapActions} from "vuex";
+import user from "../../mixins/user";
 
 export default {
   components: {Card},
-  data: () => ({
-    currentUser: {},
-    editFormSelectionItems: [],
-    loading: true,
-  }),
+  mixins: [user],
   methods: {
     ...mapActions({
       createUser: 'users/createUser',
@@ -147,13 +143,6 @@ export default {
   },
   metaInfo() {
     return {title: this.$t('create')}
-  },
-  computed: {},
-  mounted() {
-    axios.get('/api/users-edit-data').then((response) => {
-      this.editFormSelectionItems = response.data;
-      this.loading = false;
-    })
   },
 }
 </script>

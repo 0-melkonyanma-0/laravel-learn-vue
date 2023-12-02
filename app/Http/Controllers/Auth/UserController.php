@@ -11,6 +11,7 @@ use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -26,7 +27,7 @@ class UserController extends Controller
      */
     public function current(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        return response()->json([$request->user(), Auth::user()->allPermissions]);
     }
 
     public function index(): Collection
