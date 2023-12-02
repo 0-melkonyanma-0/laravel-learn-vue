@@ -9,8 +9,6 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\Settings\PasswordController;
-use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\User\DepartmentController;
 use App\Http\Controllers\User\JobTitleController;
 use App\Http\Controllers\User\RoleController;
@@ -27,35 +25,71 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function () {
     Route::post('logout', [LoginController::class, 'logout']);
-
     Route::get('user', [UserController::class, 'current']);
-    Route::get('users', [UserController::class, 'index']);
-    Route::get('users/{id}', [UserController::class, 'show']);
-    Route::post('users', [UserController::class, 'store']);
-    Route::patch('users/{id}', [UserController::class, 'update']);
-    Route::delete('users/{id}', [UserController::class, 'destroy']);
-    Route::get('users-edit-data', [UserController::class, 'getDataForEditForm']);
 
-    Route::get('departments', [DepartmentController::class, 'index']);
-    Route::get('departments/{id}', [DepartmentController::class, 'show']);
-    Route::post('departments', [DepartmentController::class, 'store']);
-    Route::patch('departments/{id}', [DepartmentController::class, 'update']);
-    Route::delete('departments/{id}', [DepartmentController::class, 'destroy']);
+    Route::group(['middleware' => 'can:index users'], function () {
+        Route::get('users', [UserController::class, 'index']);
 
-    Route::get('job-titles', [JobTitleController::class, 'index']);
-    Route::get('job-titles/{id}', [JobTitleController::class, 'show']);
-    Route::post('job-titles', [JobTitleController::class, 'store']);
-    Route::patch('job-titles/{id}', [JobTitleController::class, 'update']);
-    Route::delete('job-titles/{id}', [JobTitleController::class, 'destroy']);
+        Route::get('users/{id}', [UserController::class, 'show'])
+            ->middleware(['can:show users']);
+        Route::post('users', [UserController::class, 'store'])
+            ->middleware(['can:create users']);
 
-    Route::get('roles', [RoleController::class, 'index']);
-    Route::get('roles/permissions', [RoleController::class, 'getPermissions']);
-    Route::get('roles/{id}', [RoleController::class, 'show']);
-    Route::post('roles', [RoleController::class, 'store']);
-    Route::patch('roles/{id}', [RoleController::class, 'update']);
-    Route::delete('roles/{id}', [RoleController::class, 'destroy']);
+        Route::patch('users/{id}', [UserController::class, 'update'])
+            ->middleware(['can:edit users']);
+        Route::delete('users/{id}', [UserController::class, 'destroy'])
+            ->middleware(['can:delete users']);
+
+        Route::get('users-edit-data', [UserController::class, 'getDataForEditForm'])
+            ->middleware(['can:create users', 'can:edit users']);
+    });
+
+    Route::group(['middleware' => 'can:index departments'], function () {
+        Route::get('departments', [DepartmentController::class, 'index']);
+
+        Route::get('departments/{id}', [DepartmentController::class, 'show'])
+            ->middleware(['can:show departments']);
+        Route::post('departments', [DepartmentController::class, 'store'])
+            ->middleware(['can:create departments']);
+
+        Route::patch('departments/{id}', [DepartmentController::class, 'update'])
+            ->middleware(['can:edit departments']);
+        Route::delete('departments/{id}', [DepartmentController::class, 'destroy'])
+            ->middleware(['can:delete departments']);
+    });
+
+    Route::group(['middleware' => 'can:index job_titles'], function () {
+        Route::get('job-titles', [JobTitleController::class, 'index']);
+
+        Route::get('job-titles/{id}', [JobTitleController::class, 'show'])
+            ->middleware(['can:show job_titles']);
+        Route::post('job-titles', [JobTitleController::class, 'store'])
+            ->middleware(['can:create job_titles']);
+
+        Route::patch('job-titles/{id}', [JobTitleController::class, 'update'])
+            ->middleware(['can:edit job_titles']);
+        Route::delete('job-titles/{id}', [JobTitleController::class, 'destroy'])
+            ->middleware(['can:delete job_titles']);
+    });
+
+    Route::group(['middleware' => 'can:index roles'], function () {
+        Route::get('roles', [RoleController::class, 'index']);
+
+        Route::get('roles/permissions', [RoleController::class, 'getPermissions'])
+            ->middleware(['can:create roles', 'can:edit roles']);
+        Route::get('roles/{id}', [RoleController::class, 'show'])
+            ->middleware(['can:show roles']);
+        Route::post('roles', [RoleController::class, 'store'])
+            ->middleware(['can:create roles']);
+
+        Route::patch('roles/{id}', [RoleController::class, 'update'])
+            ->middleware(['can:edit roles']);
+        Route::delete('roles/{id}', [RoleController::class, 'destroy'])
+            ->middleware(['can:delete roles']);
+    });
+
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

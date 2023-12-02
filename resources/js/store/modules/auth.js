@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import * as types from '../mutation-types'
+import {Exception} from "sass";
 
 // state
 export const state = {
@@ -60,8 +61,12 @@ export const actions = {
     try {
       const {data} = await axios.get('/api/user')
 
-      commit(types.FETCH_USER_SUCCESS, {user: data[0]})
-      commit('setPermissions', {permissions: data[1]})
+
+      if (!data.hasOwnProperty('errors')) {
+        commit(types.FETCH_USER_SUCCESS, {user: data[0]})
+        commit('setPermissions', {permissions: data[1]})
+      }
+
     } catch (e) {
       commit(types.FETCH_USER_FAILURE)
     }

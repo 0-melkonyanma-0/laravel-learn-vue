@@ -41,6 +41,7 @@ return [
             'users' => [
                 'index',
                 'create',
+                'show',
                 'edit',
                 'delete',
             ],
