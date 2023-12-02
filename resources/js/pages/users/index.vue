@@ -100,7 +100,7 @@ export default {
         {text: this.$t('sex'), value: 'sex', sortable: true},
         {text: this.$t('departments'), value: 'departments', sortable: true},
         {text: this.$t('job_titles'), value: 'job_titles', sortable: true},
-        {text: this.$t('Status'), value: 'status', sortable: true},
+        {text: this.$t('status'), value: 'status', sortable: true},
       ];
 
       if (this.$can('edit users') || this.$can('delete users')) {
@@ -122,7 +122,6 @@ export default {
   },
   data: () => ({
     search: '',
-    editItem: {},
   }),
   metaInfo() {
     return {title: this.$t('users')}
