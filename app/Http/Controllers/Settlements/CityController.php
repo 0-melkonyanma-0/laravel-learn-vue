@@ -5,32 +5,26 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Settlements;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\Settlements\CityService;
 
 class CityController extends Controller
 {
+    protected CityService $cityService;
+
+    public function __construct(CityService $cityService)
+    {
+        $this->cityService = $cityService;
+    }
+
     public function index()
     {
-        //
+        return $this->cityService->getAll();
     }
 
-    public function store(Request $request)
+    public function destroy(int $id)
     {
-        //
-    }
+        $this->cityService->delete($id);
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
+        return response()->json(['message' => __('success_deleted')]);
     }
 }

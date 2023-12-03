@@ -7,9 +7,17 @@
       </template>
       <template v-slot:card-text>
         <v-data-table
-          :headers="settlementsHeader"
           :search="search"
+          :headers="settlementsHeader"
+          :items="cities"
+          :loading="loading"
         >
+          <template v-slot:progress>
+            <v-progress-linear color="red" indeterminate></v-progress-linear>
+          </template>
+          <template v-slot:item.actions="{item}">
+            <v-icon v-if="$can('delete settlements')" color="error" @click="deleteCity(item.id)">mdi-delete</v-icon>
+          </template>
         </v-data-table>
       </template>
     </card>
@@ -19,13 +27,40 @@
 <script>
 import settlements from "../../mixins/settlements";
 import Card from "../../components/Card.vue";
+import axios from "axios";
+import loading from "../../components/Loading.vue";
 
 export default {
   components: {Card},
   mixins: [settlements],
+  data: () => ({
+    loading: true,
+    cities: []
+  }),
+  mounted() {
+    this.fetchCity();
+  },
+  methods: {
+    fetchCity() {
+      axios.get('/api/cities').then((response) => {
+        this.loading = false;
+        this.cities = response.data;
+      })
+    },
+    deleteCity(id) {
+      axios.delete(`/api/cities/${id}`)
+        .then(() => {
+          this.loading = true;
+          this.fetchCity();
+        })
+        .catch(() => {
+
+        });
+    },
+  },
   metaInfo() {
     return {title: this.$t('cities')}
-  }
+  },
 }
 </script>
 

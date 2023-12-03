@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Settlements\CityController;
+use App\Http\Controllers\Settlements\RegionController;
 use App\Http\Controllers\User\DepartmentController;
 use App\Http\Controllers\User\JobTitleController;
 use App\Http\Controllers\User\RoleController;
@@ -88,6 +90,16 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
             ->middleware(['can:edit roles']);
         Route::delete('roles/{id}', [RoleController::class, 'destroy'])
             ->middleware(['can:delete roles']);
+    });
+
+    Route::group(['middleware' => 'can:index settlements'], function () {
+        Route::get('regions', [RegionController::class, 'index']);
+        Route::get('cities', [CityController::class, 'index']);
+    });
+
+    Route::group(['middleware' => 'can:delete settlements'], function () {
+        Route::delete('regions/{id}', [RegionController::class, 'destroy']);
+        Route::delete('cities/{id}', [CityController::class, 'destroy']);
     });
 
 });
