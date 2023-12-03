@@ -1,7 +1,30 @@
+import axios from "axios";
+
 export default {
   data: () => ({
-    search: ''
+    search: '',
+    dialogOn: false,
+    body: {
+      excel_file: null
+    },
   }),
+  methods: {
+    exportCitiesByRegion() {
+      axios(
+        {
+          url: '/api/export/cities-by-regions', method: 'GET', responseType: 'blob'
+        }
+      ).then((response) => {
+        const href = URL.createObjectURL(response.data);
+        console.log(response.data);
+
+        const link = document.createElement('a');
+        link.href = href;
+        link.setAttribute('download', `${this.$t('cities')}_${this.$t('regions')}.xlsx`);
+        link.click();
+      });
+    },
+  },
   computed: {
     settlementsHeader() {
       let header = [

@@ -14,7 +14,7 @@
         <v-btn
           class="ml-1"
           icon
-          @click=""
+          @click="exportCitiesByRegion"
         >
           <v-icon>mdi-export</v-icon>
         </v-btn>
@@ -49,7 +49,6 @@
 import settlements from "../../mixins/settlements";
 import Card from "../../components/Card.vue";
 import axios from "axios";
-import loading from "../../components/Loading.vue";
 
 export default {
   components: {Card},
@@ -80,6 +79,12 @@ export default {
 
         });
     },
+    // import() {
+    //   axios.post('/api/import/regions', this.body)
+    //     .then((response) => {
+    //
+    //     });
+    // }
   },
   metaInfo() {
     return {title: this.$t('cities')}
