@@ -4,6 +4,27 @@
       <template v-slot:card-title>
         <v-spacer></v-spacer>
         <v-text-field v-model="search" prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-btn
+          class="ml-1"
+          icon
+          @click="fetchCity"
+        >
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
+        <v-btn
+          class="ml-1"
+          icon
+          @click=""
+        >
+          <v-icon>mdi-export</v-icon>
+        </v-btn>
+        <v-btn
+          class="ml-1"
+          icon
+          @click=""
+        >
+          <v-icon>mdi-import</v-icon>
+        </v-btn>
       </template>
       <template v-slot:card-text>
         <v-data-table
@@ -42,6 +63,8 @@ export default {
   },
   methods: {
     fetchCity() {
+      this.loading = true;
+
       axios.get('/api/cities').then((response) => {
         this.loading = false;
         this.cities = response.data;

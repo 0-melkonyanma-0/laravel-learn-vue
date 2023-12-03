@@ -14,6 +14,8 @@ export const getters = {
 
 export const actions = {
   fetchUsers(ctx) {
+    ctx.state.loading = true;
+
     axios.get('/api/users').then((response) => {
       ctx.commit('updateUsers', Object.values(response.data));
     })

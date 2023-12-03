@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const state = {
-  roles: [], permissions: [], errors: [], loading: false,
+  roles: [], permissions: [], errors: [], loading: true,
 }
 
 export const getters = {
@@ -13,7 +13,8 @@ export const getters = {
 
 export const actions = {
   fetchRolesAndPermissions(ctx) {
-    ctx.commit('loading');
+    ctx.state.loading = true;
+
     axios.get('/api/roles').then((response) => {
       ctx.commit('updateRoles', response.data);
     });
@@ -79,7 +80,5 @@ export const mutations = {
     state.errors = [err]
   }, clearErrors(state) {
     state.errors = []
-  }, loading(state) {
-    state.loading = !state.loading;
-  }
+  },
 }

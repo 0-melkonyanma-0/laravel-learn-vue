@@ -8,6 +8,27 @@
           prepend-inner-icon="mdi-magnify"
         >
         </v-text-field>
+        <v-btn
+          class="ml-1"
+          icon
+          @click="fetchRegion"
+        >
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
+        <v-btn
+          class="ml-1"
+          icon
+          @click=""
+        >
+          <v-icon>mdi-export</v-icon>
+        </v-btn>
+        <v-btn
+          class="ml-1"
+          icon
+          @click=""
+        >
+          <v-icon>mdi-import</v-icon>
+        </v-btn>
       </template>
       <template v-slot:card-text>
         <v-data-table
@@ -37,14 +58,16 @@ export default {
   components: {Card},
   mixins: [settlements],
   mounted() {
-    this.fetchCity();
+    this.fetchRegion();
   },
   data: () => ({
     loading: true,
     regions: []
   }),
   methods: {
-    fetchCity() {
+    fetchRegion() {
+      this.loading = true;
+
       axios.get('/api/regions').then((response) => {
         this.loading = false;
         this.regions = response.data;

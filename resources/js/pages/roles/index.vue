@@ -23,7 +23,7 @@
         <v-btn
           class="ml-1"
           icon
-          @click="fetchRoles"
+          @click="fetchRolesAndPermissions"
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
