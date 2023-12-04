@@ -2,10 +2,10 @@
   <v-container>
     <v-card>
       <v-tabs background-color="cyan">
-        <v-tab>
+        <v-tab class="white--text">
           {{ $t('edit') }}
         </v-tab>
-        <v-tab>
+        <v-tab class="white--text">
           {{ $t('activity_log') }}
         </v-tab>
         <v-tab-item>
