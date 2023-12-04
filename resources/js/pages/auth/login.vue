@@ -23,6 +23,7 @@
                 v-model="form.email"
                 :label="$t('email')"
                 name="email"
+                :error-messages="form.errors.errors.email"
                 outlined
                 type="email"
               >
@@ -33,6 +34,7 @@
                 v-model="form.password"
                 :label="$t('password')"
                 name="password"
+                :error-messages="form.errors.errors.password"
                 outlined
                 type="password"
               >

@@ -1,8 +1,18 @@
 import axios from "axios";
 
+const default_erorr_state = {
+  name: '',
+  sex: '',
+  role: '',
+  email: '',
+  job_title_id: '',
+  department_id: '',
+  password: '',
+}
+
 export const state = {
   users: [],
-  errors: [],
+  errors: default_erorr_state,
   loading: true,
 }
 
@@ -54,6 +64,6 @@ export const mutations = {
     state.errors = [err]
   },
   clearErrors(state) {
-    state.errors = []
+    state.errors = default_erorr_state;
   }
 }

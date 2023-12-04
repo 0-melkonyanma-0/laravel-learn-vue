@@ -8,7 +8,7 @@ use App\Models\Settlements\Region;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CitySheet implements
+class CitiesSheet implements
     ToModel,
     WithHeadingRow
 {

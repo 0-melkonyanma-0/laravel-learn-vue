@@ -16,6 +16,7 @@
         <v-text-field
           v-model="currentUser.name"
           :label="$t('name')"
+          :error-messages="proccessedErrors.name"
           dense
           name="name"
           outlined
@@ -24,6 +25,7 @@
         <v-select
           v-model="currentUser.sex"
           :item-value="name"
+          :error-messages="proccessedErrors.sex"
           :items="editFormSelectionItems.genders"
           :label="$t('sex')"
           dense
@@ -41,6 +43,7 @@
           v-model="currentUser.role"
           :items="editFormSelectionItems.roles"
           :label="$t('role')"
+          :error-messages="proccessedErrors.role"
           dense
           item-text="name"
           item-value="id"
@@ -55,6 +58,7 @@
         </v-select>
         <v-select
           v-model="currentUser.department_id"
+          :error-messages="proccessedErrors.department_id"
           :items="editFormSelectionItems.departments"
           :label="$t('department')"
           dense
@@ -64,6 +68,7 @@
         ></v-select>
         <v-select
           v-model="currentUser.job_title_id"
+          :error-messages="proccessedErrors.job_title_id"
           :items="editFormSelectionItems.job_titles"
           :label="$t('job_title')"
           dense
@@ -72,6 +77,7 @@
           outlined
         ></v-select>
         <v-text-field
+          :error-messages="proccessedErrors.email"
           v-model="currentUser.email"
           :label="$t('email')"
           dense
@@ -80,6 +86,7 @@
         </v-text-field>
 
         <v-select
+          :error-messages="proccessedErrors.status"
           v-model="currentUser.status"
           :items="editFormSelectionItems.statuses"
           :label="$t('status')"
@@ -97,6 +104,7 @@
         <v-divider class="mb-4"></v-divider>
 
         <v-text-field
+          :error-messages="proccessedErrors.password"
           v-model="currentUser.password"
           :label="$t('password')"
           dense

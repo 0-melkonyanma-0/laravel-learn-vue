@@ -17,6 +17,7 @@
           <v-text-field
             v-model="currentUser.name"
             :label="$t('name')"
+            :error-messages="proccessedErrors.name"
             dense
             outlined
           >
@@ -26,6 +27,7 @@
             :item-value="name"
             :items="editFormSelectionItems.genders"
             :label="$t('sex')"
+            :error-messages="proccessedErrors.sex"
             dense
             outlined
           >
@@ -42,6 +44,7 @@
             :items="editFormSelectionItems.roles"
             :label="$t('role')"
             dense
+            :error-messages="proccessedErrors.role"
             item-text="name"
             item-value="id"
             outlined
@@ -57,6 +60,7 @@
             v-model="currentUser.department_id"
             :items="editFormSelectionItems.departments"
             :label="$t('department')"
+            :error-messages="proccessedErrors.department_id"
             dense
             item-text="title"
             item-value="id"
@@ -66,6 +70,7 @@
             v-model="currentUser.job_title_id"
             :items="editFormSelectionItems.job_titles"
             :label="$t('job_title')"
+            :error-messages="proccessedErrors.job_title_id"
             dense
             item-text="title"
             item-value="id"
@@ -73,6 +78,7 @@
           ></v-select>
           <v-text-field
             v-model="currentUser.email"
+            :error-messages="proccessedErrors.email"
             :label="$t('email')"
             dense
             outlined
@@ -83,6 +89,7 @@
             v-model="currentUser.status"
             :items="editFormSelectionItems.statuses"
             :label="$t('status')"
+            :error-messages="proccessedErrors.status"
             dense
             outlined
           >
@@ -99,6 +106,7 @@
             :label="$t('password')"
             dense
             outlined
+            :error-messages="proccessedErrors.password"
             type="password"
           ></v-text-field>
           <v-text-field
