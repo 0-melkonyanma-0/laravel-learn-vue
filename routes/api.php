@@ -95,7 +95,7 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
     Route::group(['middleware' => 'can:index settlements'], function () {
         Route::get('regions', [RegionController::class, 'index']);
         Route::get('export/cities-by-regions', [RegionController::class, 'export']);
-        Route::post('import/city', [CityController::class, 'import']);
+        Route::post('import/cities', [CityController::class, 'import']);
         Route::post('import/regions', [RegionController::class, 'import']);
 
         Route::get('cities', [CityController::class, 'index']);

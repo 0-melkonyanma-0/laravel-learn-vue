@@ -1,163 +1,48 @@
 <template>
   <v-container>
-    <v-form @submit.prevent="false">
-      <v-card v-if="loading" height="800">
-        <v-card-text>
-          <v-sheet
-            color="lighten-4"
-          >
-            <v-skeleton-loader class="mx-auto" max-height="800" type="article"></v-skeleton-loader>
-          </v-sheet>
-        </v-card-text>
-      </v-card>
-      <card v-else :title="$t('edit')">
-        <template
-          v-slot:card-text
-        >
-          <v-text-field
-            v-model="currentUser.name"
-            :label="$t('name')"
-            dense
-            name="name"
-            outlined
-          >
-          </v-text-field>
-          <v-select
-            v-model="currentUser.sex"
-            :item-value="name"
-            :items="editFormSelectionItems.genders"
-            :label="$t('sex')"
-            dense
-            outlined
-          >
-            <template v-slot:item="{active, item, attrs, on}">
-              {{ $t(item) }}
-            </template>
-            <template v-slot:selection="{active, item, attrs, on}">
-              {{ $t(item) }}
-            </template>
-          </v-select>
-
-          <v-select
-            v-model="currentUser.role"
-            :items="editFormSelectionItems.roles"
-            :label="$t('role')"
-            dense
-            item-text="name"
-            item-value="id"
-            outlined
-          >
-            <template v-slot:item="{active, item, attrs, on}">
-              {{ $t(item.name) }}
-            </template>
-            <template v-slot:selection="{active, item, attrs, on}">
-              {{ $t(item.name) }}
-            </template>
-          </v-select>
-          <v-select
-            v-model="currentUser.department_id"
-            :items="editFormSelectionItems.departments"
-            :label="$t('department')"
-            dense
-            item-text="title"
-            item-value="id"
-            outlined
-          ></v-select>
-          <v-select
-            v-model="currentUser.job_title_id"
-            :items="editFormSelectionItems.job_titles"
-            :label="$t('job_title')"
-            dense
-            item-text="title"
-            item-value="id"
-            outlined
-          ></v-select>
-          <v-text-field
-            v-model="currentUser.email"
-            :label="$t('email')"
-            dense
-            outlined
-          >
-          </v-text-field>
-
-          <v-select
-            v-model="currentUser.status"
-            :items="editFormSelectionItems.statuses"
-            :label="$t('status')"
-            dense
-            outlined
-          >
-            <template v-slot:item="{active, item, attrs, on}">
-              {{ $t(item) }}
-            </template>
-            <template v-slot:selection="{active, item, attrs, on}">
-              {{ $t(item) }}
-            </template>
-          </v-select>
-
-          <v-divider class="mb-4"></v-divider>
-
-          <v-text-field
-            v-model="currentUser.password"
-            :label="$t('password')"
-            dense
-            outlined
-            type="password"
-          ></v-text-field>
-          <v-text-field
-            v-model="currentUser.password_confirmation"
-            :label="$t('confirm_password')"
-            dense
-            outlined
-            type="password"
-          ></v-text-field>
-        </template>
-        <template
-          v-slot:card-actions
-        >
-          <v-spacer/>
-          <v-btn
-            color="success"
-            outlined
-            plain
-            type="success"
-            @click="updateUser(currentUser)"
-          >
-            {{ $t('update') }}
-          </v-btn>
-        </template>
-      </card>
-    </v-form>
+    <v-card>
+      <v-tabs background-color="cyan">
+        <v-tab>
+          {{ $t('edit') }}
+        </v-tab>
+        <v-tab>
+          {{ $t('activity_log') }}
+        </v-tab>
+        <v-tab-item>
+          <EditUser :current-user="user"/>
+        </v-tab-item>
+        <v-tab-item>
+          <ActivityLog :activity-log="activityLog"/>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import Card from "../../components/Card.vue";
+import EditUser from "./edit/EditUser.vue";
+import ActivityLog from "./edit/ActivityLog.vue";
 import axios from "axios";
-import {mapActions} from "vuex";
-import user from "../../mixins/user";
 
 export default {
-  components: {Card},
-  mixins: [user],
-  methods: {
-    ...mapActions({
-      updateUser: 'users/updateUser',
-    }),
-  },
-  metaInfo() {
-    return {title: this.$t('edit')}
-  },
+  components: {ActivityLog, EditUser, Card},
+  data: () => ({
+    user: null,
+    activityLog: null,
+  }),
   mounted() {
     axios.get(`/api/users/${this.$route.params.id}`).then((response) => {
-      this.currentUser = {
-        ...response.data[0],
-        role: response.data[0].roles.length ? response.data[0].roles[0].id : null
+      this.user = {
+        ...response.data.user[0],
+        role: response.data.user[0].roles.length ? response.data.user[0].roles[0].id : null
       };
 
-      delete this.currentUser.roles;
-      delete this.currentUser.job_title;
-      delete this.currentUser.department;
+      delete this.user.roles;
+      delete this.user.job_title;
+      delete this.user.department;
+
+      this.activityLog = response.data.activity_log;
     });
   },
 }

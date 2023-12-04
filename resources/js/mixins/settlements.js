@@ -8,6 +8,11 @@ export default {
       excel_file: null
     },
   }),
+  watch: {
+    dialogOn() {
+      this.body.excel_file = null;
+    }
+  },
   methods: {
     exportCitiesByRegion() {
       axios(

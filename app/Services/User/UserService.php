@@ -10,6 +10,7 @@ use App\Models\User\Department;
 use App\Models\User\JobTitle;
 use App\Models\User\User;
 use Illuminate\Support\Collection;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 
 class UserService
@@ -23,7 +24,10 @@ class UserService
 
     public function show(int $id): Collection
     {
-        return User::whereId($id)->with(['roles'])->get();
+        return collect([
+            'user' => User::whereId($id)->with(['roles'])->get(),
+            'activity_log' => Activity::where('subject_id', '=', $id)->orderBy('created_at', 'desc')->get()
+        ]);
     }
 
     public function store(array $data): void

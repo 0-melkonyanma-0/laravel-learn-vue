@@ -48,6 +48,8 @@
           :headers="departmentTableHeader"
           :items="departments"
           :loading="loading"
+          :loading-text="tableTitles.loading_text"
+          :no-data-text="tableTitles.no_data_text"
           :search="search"
         >
           <template v-slot:progress>
@@ -69,10 +71,12 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import Card from "../../components/Card.vue";
 import Create from "./create.vue";
 import Edit from "./edit.vue";
+import tableTitles from "../../mixins/data_table_titles";
 
 export default {
   name: "index.vue",
   components: {Edit, Create, Card},
+  mixins: [tableTitles],
   middleware: 'auth',
   computed: {
     ...mapGetters({

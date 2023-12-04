@@ -34,6 +34,8 @@
           :headers="rolesTableHeader"
           :items="users"
           :loading="loading"
+          :loading-text="tableTitles.loading_text"
+          :no-data-text="tableTitles.no_data_text"
           :search="search"
         >
           <template v-slot:progress>
@@ -80,6 +82,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import tableTitles from "../../mixins/data_table_titles";
 import Card from "../../components/Card.vue";
 import Create from "./create.vue";
 import Edit from "./edit.vue";
@@ -87,6 +90,7 @@ import Edit from "./edit.vue";
 export default {
   name: "index.vue",
   components: {Edit, Create, Card},
+  mixins: [tableTitles],
   computed: {
     ...mapGetters({
       users: 'users/users',

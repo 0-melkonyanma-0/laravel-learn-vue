@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Settlements;
 
 use App\Helpers\ConvertFiles;
-use App\Jobs\ImportCityJob;
+use App\Jobs\ImportRegionJob;
 use App\Models\Settlements\Region;
 use Illuminate\Support\Collection;
 
@@ -30,6 +30,6 @@ class RegionService
             $filePath = (new ConvertFiles())->xlsToXLSX($filePath);
         }
 
-        ImportCityJob::dispatch($filePath);
+        ImportRegionJob::dispatch($filePath);
     }
 }

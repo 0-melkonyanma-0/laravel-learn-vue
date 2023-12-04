@@ -1,5 +1,26 @@
 <template>
   <v-container>
+    <v-dialog v-model="dialogOn" width="500">
+      <card :title="$t('import_cities')">
+        <template v-slot:card-text>
+          <v-form @submit.prevent="false">
+            <v-file-input
+              v-model="body.excel_file"
+              show-size
+              truncate-length="15"
+            >
+            </v-file-input>
+          </v-form>
+        </template>
+        <template v-slot:card-actions>
+          <v-spacer></v-spacer>
+          <v-btn type="success" @click="importCity">
+            {{ $t("importing") }}
+          </v-btn>
+        </template>
+      </card>
+    </v-dialog>
+
     <card :title="$t('cities')">
       <template v-slot:card-title>
         <v-spacer></v-spacer>
@@ -7,7 +28,7 @@
         <v-btn
           class="ml-1"
           icon
-          @click="fetchCity"
+          @click="fetchCities"
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
@@ -21,17 +42,19 @@
         <v-btn
           class="ml-1"
           icon
-          @click=""
+          @click="dialogOn = !dialogOn"
         >
           <v-icon>mdi-import</v-icon>
         </v-btn>
       </template>
       <template v-slot:card-text>
         <v-data-table
-          :search="search"
           :headers="settlementsHeader"
           :items="cities"
           :loading="loading"
+          :loading-text="tableTitles.loading_text"
+          :no-data-text="tableTitles.no_data_text"
+          :search="search"
         >
           <template v-slot:progress>
             <v-progress-linear color="red" indeterminate></v-progress-linear>
@@ -49,19 +72,20 @@
 import settlements from "../../mixins/settlements";
 import Card from "../../components/Card.vue";
 import axios from "axios";
+import tableTitles from "../../mixins/data_table_titles";
 
 export default {
   components: {Card},
-  mixins: [settlements],
+  mixins: [settlements, tableTitles],
   data: () => ({
     loading: true,
     cities: []
   }),
   mounted() {
-    this.fetchCity();
+    this.fetchCities();
   },
   methods: {
-    fetchCity() {
+    fetchCities() {
       this.loading = true;
 
       axios.get('/api/cities').then((response) => {
@@ -73,18 +97,31 @@ export default {
       axios.delete(`/api/cities/${id}`)
         .then(() => {
           this.loading = true;
-          this.fetchCity();
+          this.fetchCities();
         })
         .catch(() => {
 
         });
     },
-    // import() {
-    //   axios.post('/api/import/regions', this.body)
-    //     .then((response) => {
-    //
-    //     });
-    // }
+    importCity() {
+      const form = new FormData();
+
+      form.append(
+        "excel_file",
+        this.body.excel_file,
+        this.body.excel_file.file
+      );
+
+      axios
+        .post("/api/import/cities", form, {
+          headers: {
+            "Content-Type": this.body.excel_file.type,
+          },
+        })
+        .then((response) => {
+          this.dialogOn = false;
+        });
+    },
   },
   metaInfo() {
     return {title: this.$t('cities')}

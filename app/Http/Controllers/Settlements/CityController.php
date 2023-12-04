@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Settlements;
 
 use App\Http\Controllers\Controller;
-use App\Imports\CitiesRegionImport;
+use App\Http\Requests\Settlements\CitiesByRegionRequest;
 use App\Services\Settlements\CityService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 
 class CityController extends Controller
 {
@@ -18,19 +19,19 @@ class CityController extends Controller
         $this->cityService = $cityService;
     }
 
-    public function index()
+    public function index(): Collection
     {
         return $this->cityService->getAll();
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $this->cityService->delete($id);
 
         return response()->json(['message' => __('success_deleted')]);
     }
 
-    public function import(CitiesRegionImport $request): JsonResponse
+    public function import(CitiesByRegionRequest $request): JsonResponse
     {
         $this->cityService->import(collect($request->validated()));
 

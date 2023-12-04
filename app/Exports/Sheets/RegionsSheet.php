@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class RegionSheet implements
+class RegionsSheet implements
     FromCollection,
     WithTitle,
     ShouldAutoSize,
@@ -24,7 +24,7 @@ class RegionSheet implements
 
     public function title(): string
     {
-        return __("regions");
+        return __('regions');
     }
     public function headings(): array
     {

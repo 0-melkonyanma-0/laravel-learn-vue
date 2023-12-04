@@ -5,10 +5,11 @@ declare(strict_types= 1);
 namespace App\Exports;
 
 
-use App\Exports\Sheets\CitySheet;
-use App\Exports\Sheets\RegionSheet;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Exports\Sheets\CitiesSheet;
+use App\Exports\Sheets\RegionsSheet;
+use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class CitiesRegionExport implements
@@ -19,9 +20,11 @@ class CitiesRegionExport implements
 
     public function sheets(): array
     {
+        App::setLocale('ru');
+
         return [
-            new CitySheet(),
-            new RegionSheet(),
+            new CitiesSheet(),
+            new RegionsSheet(),
         ];
     }
 }

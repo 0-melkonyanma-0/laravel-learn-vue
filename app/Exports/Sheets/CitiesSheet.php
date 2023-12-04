@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class CitySheet implements
+class CitiesSheet implements
     FromCollection,
     WithTitle,
     ShouldAutoSize,

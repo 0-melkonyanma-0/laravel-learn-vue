@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Imports;
 
-use App\Imports\Sheets\RegionSheet;
+use App\Imports\Sheets\RegionsSheet;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
@@ -17,7 +17,7 @@ class RegionsImport implements
     public function sheets(): array
     {
         return [
-            __('regions') => new RegionSheet()
+            __('regions') => new RegionsSheet()
         ];
     }
 

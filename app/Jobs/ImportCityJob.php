@@ -18,17 +18,11 @@ class ImportCityJob implements ShouldQueue
 
     protected string $path;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(string $path)
     {
         $this->path = $path;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         Excel::import(new CitiesRegionImport(), $this->path);

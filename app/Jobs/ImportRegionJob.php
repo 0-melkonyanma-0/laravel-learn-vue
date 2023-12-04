@@ -6,11 +6,11 @@ namespace App\Jobs;
 
 use App\Imports\RegionsImport;
 use Illuminate\Bus\Queueable;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ImportRegionJob implements ShouldQueue
 {
