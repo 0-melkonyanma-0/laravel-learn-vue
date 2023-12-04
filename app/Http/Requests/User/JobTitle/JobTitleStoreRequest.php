@@ -23,7 +23,7 @@ class JobTitleStoreRequest extends FormRequest
                 'bail',
                 'min:4',
                 'max:255',
-                'unique:departments,title'
+                'unique:job_titles,title'
             ]
         ];
     }
