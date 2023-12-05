@@ -35,7 +35,7 @@
           :exact="false"
           class="px-4"
           link
-          @click="$router.push(child.path)"
+          @click="redirectTo(child.path)"
         >
           <v-list-item-content>
             <v-list-item-title>{{ child.name }}</v-list-item-title>
@@ -54,6 +54,13 @@ export default {
     },
     appName: {
       type: String,
+    }
+  },
+  methods: {
+    redirectTo(pathName) {
+      this.$router.push(pathName).catch((t) => {
+        console.log('[SAME PAGE]');
+      })
     }
   },
   computed: {
