@@ -27,6 +27,7 @@ export const actions = {
   },
   updateJobTitle(ctx, department) {
     axios.patch(`/api/job-titles/${department.id}`, department).then(() => {
+      ctx.commit('clearErrors');
       ctx.dispatch('fetchJobTitles');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
@@ -34,8 +35,8 @@ export const actions = {
   },
   createJobTitle(ctx, body) {
     axios.post('/api/job-titles', {...body}).then((response) => {
-      ctx.dispatch('fetchJobTitles');
       body.title = '';
+      ctx.dispatch('fetchJobTitles');
       ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);

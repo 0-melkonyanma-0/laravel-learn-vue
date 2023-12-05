@@ -71,7 +71,7 @@
 
 <script>
 import Card from "../../components/Card.vue";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   components: {Card},
@@ -97,6 +97,14 @@ export default {
       },
       deep: true,
     },
+    request_done: {
+      handler() {
+        if(this.request_done === true) {
+          this.$router.push({name: 'users.roles'});
+          this.resetRequestStatus();
+        }
+      }
+    }
   },
   computed: {
     body() {
@@ -135,6 +143,7 @@ export default {
       permissions: 'roles/permissions',
       loading: 'roles/loading',
       errors: 'roles/errors',
+      request_done: 'roles/request_done',
     }),
   },
   methods: {
@@ -142,6 +151,9 @@ export default {
       fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
       createRole: 'roles/createRole',
       updateRole: 'roles/updateRole',
+    }),
+    ...mapMutations({
+      resetRequestStatus: 'roles/resetRequestStatus',
     }),
     addPermission(permission, checked) {
       if (checked && !this.body.permissions.includes(permission)) {

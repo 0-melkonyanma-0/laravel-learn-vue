@@ -1,22 +1,24 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-tabs background-color="cyan">
-        <v-tab class="white--text">
-          {{ $t('edit') }}
-        </v-tab>
-        <v-tab class="white--text"  v-if="activityLog.length !== 0">
-          {{ $t('activity_log') }}
-        </v-tab>
-        <v-tab-item>
-          <EditUser :current-user="user"/>
-        </v-tab-item>
-        <v-tab-item v-if="activityLog.length !== 0">
-          <ActivityLog :activity-log="activityLog"/>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>
-  </v-container>
+  <div>
+    <v-container>
+      <v-card>
+        <v-tabs background-color="cyan">
+          <v-tab class="white--text">
+            {{ $t('edit') }}
+          </v-tab>
+          <v-tab class="white--text" v-if="activityLog.length !== 0">
+            {{ $t('activity_log') }}
+          </v-tab>
+          <v-tab-item>
+            <EditUser :current-user="user"/>
+          </v-tab-item>
+          <v-tab-item v-if="activityLog.length !== 0">
+            <ActivityLog :activity-log="activityLog"/>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>

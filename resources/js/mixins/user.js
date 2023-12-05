@@ -6,10 +6,23 @@ export default {
     currentUser: {},
     editFormSelectionItems: [],
     loading: true,
+    alert: false,
   }),
+  watch: {
+    request_done: {
+      handler() {
+        if(this.request_done === true) {
+          this.$router.push({name: 'users.index'});
+          this.resetRequestStatus();
+          this.alert = true;
+        }
+      }
+    }
+  },
   computed: {
     ...mapGetters({
-      errors: 'users/errors'
+      errors: 'users/errors',
+      request_done: 'users/request_done',
     }),
     proccessedErrors() {
       if (Array.isArray(this.errors)) {
@@ -21,7 +34,8 @@ export default {
   },
   methods: {
     ...mapMutations({
-      clearErrors: 'users/clearErrors'
+      clearErrors: 'users/clearErrors',
+      resetRequestStatus: 'users/resetRequestStatus',
     })
   },
   mounted() {

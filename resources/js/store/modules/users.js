@@ -14,12 +14,14 @@ export const state = {
   users: [],
   errors: default_erorr_state,
   loading: true,
+  request_done: false,
 }
 
 export const getters = {
   users: state => state.users,
   errors: state => state.errors,
   loading: state => state.loading,
+  request_done: state => state.request_done,
 }
 
 export const actions = {
@@ -37,16 +39,20 @@ export const actions = {
   },
   updateUser(ctx, user) {
     axios.patch(`/api/users/${user.id}`, user).then(() => {
+      ctx.state.request_done = true;
       ctx.dispatch('fetchUsers');
     }).catch((err) => {
+      ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
     });
   },
   createUser(ctx, body) {
     axios.post('/api/users', {...body}).then((response) => {
+      ctx.state.request_done = true;
       ctx.dispatch('fetchUsers');
       ctx.commit('clearErrors');
     }).catch((err) => {
+      ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
     });
   }
@@ -59,6 +65,9 @@ export const mutations = {
   },
   deleteUser(state, userId) {
     state.users = state.users.filter((user) => user.id !== userId)
+  },
+  resetRequestStatus(state) {
+    state.request_done = false;
   },
   setErrors(state, err) {
     state.errors = [err]

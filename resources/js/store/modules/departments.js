@@ -28,6 +28,7 @@ export const actions = {
   updateDepartment(ctx, department) {
     axios.patch(`/api/departments/${department.id}`, department).then(() => {
       ctx.dispatch('fetchDepartments');
+      ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
     });

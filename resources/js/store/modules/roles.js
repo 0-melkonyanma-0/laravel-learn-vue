@@ -1,7 +1,11 @@
 import axios from "axios";
 
 export const state = {
-  roles: [], permissions: [], errors: [], loading: true,
+  roles: [],
+  permissions: [],
+  errors: [],
+  loading: true,
+  request_done: false,
 }
 
 export const getters = {
@@ -9,6 +13,7 @@ export const getters = {
   permissions: state => state.permissions,
   errors: state => state.errors,
   loading: state => state.loading,
+  request_done: state => state.request_done,
 }
 
 export const actions = {
@@ -30,20 +35,21 @@ export const actions = {
   },
   updateRole(ctx, role) {
     axios.patch(`/api/roles/${role.id}`, role).then(() => {
-      // window.location.href = '/users/roles';
+      ctx.state.request_done = true;
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
+      ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
     });
   }, createRole(ctx, body) {
-    // window.location.href = '/users/roles';
-
     axios.post('/api/roles', {...body}).then((response) => {
       body.title = '';
       body.permissions = [];
+      ctx.state.request_done = true;
       ctx.commit('clearErrors');
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
+      ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
     });
   }
@@ -81,4 +87,7 @@ export const mutations = {
   }, clearErrors(state) {
     state.errors = []
   },
+  resetRequestStatus(state) {
+    state.request_done = false;
+  }
 }
