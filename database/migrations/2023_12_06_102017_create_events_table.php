@@ -20,8 +20,8 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->date('start');
-            $table->date('end');
+            $table->timestamp('start');
+            $table->timestamp('end');
             $table->string('color');
             $table->boolean('status')->default(false);
             $table->foreignIdFor(User::class)->constrained();

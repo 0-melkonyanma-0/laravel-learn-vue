@@ -12,6 +12,7 @@ const default_erorr_state = {
 export const state = {
   start: null,
   end: null,
+  loading: false,
   events: [],
   errors: default_erorr_state,
 }
@@ -22,36 +23,51 @@ export const getters = {
 
 export const actions = {
   fetchEvents({commit, state}) {
+    state.loading = true;
     axios.get(`/api/events`).then((response) => {
+      state.loading = false;
       commit('updateEvents', response.data);
     });
   },
   createEvent({commit, state, dispatch}, body) {
-    axios.post('/api/events', body).then((response) => {
-      dispatch('fetchEvents');
-    }).catch((response) => {
+    state.loading = true;
 
+    axios.post('/api/events', body).then((response) => {
+      state.loading = false;
+      commit('clearErrors');
+      dispatch('fetchEvents');
+    }).catch((err) => {
+      commit('setErrors', err.response.data.errors);
     });
   },
   updateEvent({commit, state, dispatch}, body) {
-    axios.patch(`/api/events/${body.id}`, body).then((response) => {
-      dispatch('fetchEvents');
-    }).catch((response) => {
+    state.loading = true;
 
+    axios.patch(`/api/events/${body.id}`, body).then((response) => {
+      state.loading = false;
+      commit('clearErrors');
+      dispatch('fetchEvents');
+    }).catch((err) => {
+      commit('setErrors', err.response.data.errors);
     });
   },
   updateEventStatus({commit, state, dispatch}, id) {
+    state.loading = true;
     axios.patch(`/api/events-status/${id}`).then((response) => {
+      state.loading = false;
+      commit('clearErrors');
       dispatch('fetchEvents');
-    }).catch((response) => {
-
+    }).catch((err) => {
+      commit('setErrors', err.response.data.errors);
     });
   },
   deleteEvent({commit, state}, id) {
+    state.loading = true;
     axios.delete(`/api/events/${id}`).then((response) => {
-      console.log(response);
+      state.loading = false;
+      commit('clearErrors');
     }).catch((response) => {
-      console.log(response);
+      commit('setErrors', response.data.errors);
     });
   }
 }

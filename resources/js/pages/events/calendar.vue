@@ -8,185 +8,8 @@
           v-model="dialogOn"
           width="600"
         >
-          <card
-            v-if="dialogType === 'create'"
-            :title="$t('create')"
-          >
-            <template v-slot:card-text>
-              <v-text-field
-                v-model="body.name"
-                :label="$t('title')"
-                dense
-                outlined
-              >
-              </v-text-field>
-              <v-textarea
-                v-model="body.description"
-                :label="$t('description')"
-                dense
-                height="100"
-                no-resize
-                outlined
-              >
-              </v-textarea>
-
-              <v-select
-                v-model="body.user_id"
-                :items="users"
-                :label="$t('executor')"
-                item-value="id"
-                outlined
-              >
-                <template v-slot:item="{active, item, attrs, on}">
-                  {{ item.name }}
-                </template>
-                <template v-slot:selection="{active, item, attrs, on}">
-                  {{ item.name }}
-                </template>
-              </v-select>
-
-              <v-text-field
-                v-model="body.start"
-                :label="$t('start_date')"
-                dense
-                name="start"
-                outlined
-                type="datetime-local"
-              >
-              </v-text-field>
-              <v-text-field
-                v-model="body.end"
-                :label="$t('end_date')"
-                dense
-                name="end"
-                outlined
-                type="datetime-local"
-              >
-              </v-text-field>
-              <div class="justify-content-center">
-                <v-color-picker
-                  v-model="body.color"
-                  hide-canvas
-                  hide-inputs
-                  width="500"
-                />
-              </div>
-            </template>
-            <template v-slot:card-actions>
-              <v-spacer/>
-              <v-btn
-                color="success"
-                outlined
-                plain
-                type="success"
-                @click="createEvent(body)"
-              >
-                {{ $t('create') }}
-              </v-btn>
-            </template>
-          </card>
-          <card v-else-if="dialogType === 'edit'" :title="editFormTitle">
-            <template v-if="editBody.status" v-slot:card-title>
-              <v-chip :color="editBody.color">{{ editBody.name }}</v-chip>
-            </template>
-            <template v-slot:card-text>
-              {{ editBody }}
-              <v-text-field
-                v-model="editBody.name"
-                :disabled="editBody.status"
-                :label="$t('title')"
-                dense
-                outlined
-              >
-              </v-text-field>
-              <v-textarea
-                v-model="editBody.description"
-                :disabled="editBody.status"
-                :label="$t('description')"
-                dense
-                height="100"
-                no-resize
-                outlined
-              >
-              </v-textarea>
-
-              <v-select
-                v-model="editBody.user_id"
-                :disabled="editBody.status"
-                :items="users"
-                :label="$t('executor')"
-                item-value="id"
-                outlined
-              >
-                <template v-slot:item="{active, item, attrs, on}">
-                  {{ item.name }}
-                </template>
-                <template v-slot:selection="{active, item, attrs, on}">
-                  {{ item.name }}
-                </template>
-              </v-select>
-
-              <v-text-field
-                v-model="editBody.start"
-                :disabled="editBody.status"
-                :label="$t('start_date')"
-                dense
-                name="start"
-                outlined
-                type="datetime-local"
-              >
-              </v-text-field>
-              <v-text-field
-                v-model="editBody.end"
-                :disabled="editBody.status"
-                :label="$t('end_date')"
-                dense
-                name="end"
-                outlined
-                type="datetime-local"
-              >
-              </v-text-field>
-              <div class="justify-content-center">
-                <v-color-picker
-                  v-model="editBody.color"
-                  :disabled="editBody.status"
-                  hide-canvas
-                  hide-inputs
-                  width="500"
-                />
-              </div>
-            </template>
-            <template v-slot:card-actions>
-              <div v-if="!editBody.status">
-                <v-btn
-                  @click="updateEventStatus(editBody.id)"
-                >
-                  {{ $t('done') }}
-                </v-btn>
-                <v-spacer/>
-                <v-btn
-                  v-if="$can('delete events')"
-                  color="red"
-                  outlined
-                  plain
-                  type="success"
-                  @click="deleteEvent(editBody.id)"
-                >
-                  {{ $t('delete') }}
-                </v-btn>
-                <v-btn
-                  v-if="$can('edit events')"
-                  color="success"
-                  outlined
-                  plain
-                  type="success"
-                  @click="updateEvent(editBody)"
-                >
-                  {{ $t('edit') }}
-                </v-btn>
-              </div>
-            </template>
-          </card>
+          <create-event v-if="dialogType === 'create'" :dialog-on="dialogOn"/>
+          <edit-event v-else-if="dialogType === 'edit'" :edit-body="editBody"/>
         </v-dialog>
         <v-sheet>
           <v-toolbar
@@ -224,7 +47,7 @@
               outlined
               small
               text
-              @click="dialogOn = !dialogOn"
+              @click="createEvent"
             >
               <v-icon small>
                 mdi-plus
@@ -275,7 +98,8 @@
             @click:event="showEvent"
             @click:date="viewDay"
             @click:more="viewDay"
-          />
+          >
+          </v-calendar>
         </v-sheet>
       </template>
     </card>
@@ -285,9 +109,11 @@
 <script>
 import Card from "../../components/Card.vue";
 import {mapActions, mapGetters} from "vuex";
+import CreateEvent from "./calendar/CreateEvent.vue";
+import EditEvent from "./calendar/EditEvent.vue";
 
 export default {
-  components: {Card},
+  components: {EditEvent, CreateEvent, Card},
   metaInfo() {
     return {title: this.$t('calendar')}
   },
@@ -297,29 +123,13 @@ export default {
       events: 'events/events',
       users: 'users/users'
     }),
-    editFormTitle() {
-      return !this.editBody.status ? this.$t('edit') : '';
-    }
-  },
-  watch: {
-    dialogType() {
-      this.dialogType = 'edit';
-    }
   },
   data: () => ({
-    body: {
-      name: '',
-      description: '',
-      start: '',
-      end: '',
-      color: '',
-      user_id: '',
-    },
     editBody: {
       status: false
     },
-    dialogOn: true,
-    dialogType: 'edit',
+    dialogOn: false,
+    dialogType: '',
     focus: '',
     type: 'month',
     typeToLabel: {
@@ -330,22 +140,16 @@ export default {
   }),
   mounted() {
     this.fetchEvents();
-    this.fetchUsers();
     this.$refs.calendar.checkChange();
   },
   methods: {
     ...mapActions({
       fetchEvents: 'events/fetchEvents',
-      createEvent: 'events/createEvent',
-      fetchUsers: 'users/fetchUsers',
-      updateEvent: 'events/updateEvent',
-      updateEventStatus: 'events/updateEventStatus',
-      deleteEvent: 'events/deleteEvent'
     }),
     showEvent({nativeEvent, event}) {
       this.editBody = {...event};
       this.dialogType = 'edit';
-      this.dialogOn = true;
+      this.dialogOn = !this.dialogOn;
     },
     updateRange({start, end}) {
       this.fetchEvents();
@@ -362,6 +166,10 @@ export default {
     },
     next() {
       this.$refs.calendar.next();
+    },
+    createEvent() {
+      this.dialogType = 'create';
+      this.dialogOn = !this.dialogOn;
     }
   },
 }
