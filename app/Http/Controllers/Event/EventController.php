@@ -46,4 +46,11 @@ class EventController extends Controller
 
         return response()->json(['message' => __('success_deleted')]);
     }
+
+    public function updateStatus(int $id): JsonResponse
+    {
+        $this->eventService->updateStatus($id);
+
+        return response()->json(['message' => __('success_updated_status')]);
+    }
 }

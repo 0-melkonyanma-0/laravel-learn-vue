@@ -99,6 +99,8 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
             ->middleware(['can:create events']);
         Route::patch('events/{id}', [EventController::class, 'update'])
             ->middleware(['can:edit events']);
+        Route::patch('events-status/{id}', [EventController::class, 'updateStatus'])
+            ->middleware(['can:edit events']);
         Route::delete('events/{id}', [EventController::class, 'destroy'])
             ->middleware(['can:delete events']);
     });

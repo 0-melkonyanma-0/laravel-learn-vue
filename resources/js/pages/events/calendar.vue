@@ -8,7 +8,10 @@
           v-model="dialogOn"
           width="600"
         >
-          <card :title="$t('create')">
+          <card
+            v-if="dialogType === 'create'"
+            :title="$t('create')"
+          >
             <template v-slot:card-text>
               <v-text-field
                 v-model="body.name"
@@ -82,6 +85,108 @@
               </v-btn>
             </template>
           </card>
+          <card v-else-if="dialogType === 'edit'" :title="editFormTitle">
+            <template v-if="editBody.status" v-slot:card-title>
+              <v-chip :color="editBody.color">{{ editBody.name }}</v-chip>
+            </template>
+            <template v-slot:card-text>
+              {{ editBody }}
+              <v-text-field
+                v-model="editBody.name"
+                :disabled="editBody.status"
+                :label="$t('title')"
+                dense
+                outlined
+              >
+              </v-text-field>
+              <v-textarea
+                v-model="editBody.description"
+                :disabled="editBody.status"
+                :label="$t('description')"
+                dense
+                height="100"
+                no-resize
+                outlined
+              >
+              </v-textarea>
+
+              <v-select
+                v-model="editBody.user_id"
+                :disabled="editBody.status"
+                :items="users"
+                :label="$t('executor')"
+                item-value="id"
+                outlined
+              >
+                <template v-slot:item="{active, item, attrs, on}">
+                  {{ item.name }}
+                </template>
+                <template v-slot:selection="{active, item, attrs, on}">
+                  {{ item.name }}
+                </template>
+              </v-select>
+
+              <v-text-field
+                v-model="editBody.start"
+                :disabled="editBody.status"
+                :label="$t('start_date')"
+                dense
+                name="start"
+                outlined
+                type="datetime-local"
+              >
+              </v-text-field>
+              <v-text-field
+                v-model="editBody.end"
+                :disabled="editBody.status"
+                :label="$t('end_date')"
+                dense
+                name="end"
+                outlined
+                type="datetime-local"
+              >
+              </v-text-field>
+              <div class="justify-content-center">
+                <v-color-picker
+                  v-model="editBody.color"
+                  :disabled="editBody.status"
+                  hide-canvas
+                  hide-inputs
+                  width="500"
+                />
+              </div>
+            </template>
+            <template v-slot:card-actions>
+              <div v-if="!editBody.status">
+                <v-btn
+                  @click="updateEventStatus(editBody.id)"
+                >
+                  {{ $t('done') }}
+                </v-btn>
+                <v-spacer/>
+                <v-btn
+                  v-if="$can('delete events')"
+                  color="red"
+                  outlined
+                  plain
+                  type="success"
+                  @click="deleteEvent(editBody.id)"
+                >
+                  {{ $t('delete') }}
+                </v-btn>
+                <v-btn
+                  v-if="$can('edit events')"
+                  color="success"
+                  outlined
+                  plain
+                  type="success"
+                  @click="updateEvent(editBody)"
+                >
+                  {{ $t('edit') }}
+                </v-btn>
+              </div>
+            </template>
+          </card>
         </v-dialog>
         <v-sheet>
           <v-toolbar
@@ -113,6 +218,7 @@
               </v-icon>
             </v-btn>
             <v-btn
+              v-if="$can('create events')"
               color="primary"
               fab
               outlined
@@ -166,6 +272,7 @@
             :type="type"
             color="primary"
             @change="updateRange"
+            @click:event="showEvent"
             @click:date="viewDay"
             @click:more="viewDay"
           />
@@ -189,7 +296,15 @@ export default {
       locale: 'lang/locale',
       events: 'events/events',
       users: 'users/users'
-    })
+    }),
+    editFormTitle() {
+      return !this.editBody.status ? this.$t('edit') : '';
+    }
+  },
+  watch: {
+    dialogType() {
+      this.dialogType = 'edit';
+    }
   },
   data: () => ({
     body: {
@@ -200,7 +315,11 @@ export default {
       color: '',
       user_id: '',
     },
+    editBody: {
+      status: false
+    },
     dialogOn: true,
+    dialogType: 'edit',
     focus: '',
     type: 'month',
     typeToLabel: {
@@ -219,7 +338,15 @@ export default {
       fetchEvents: 'events/fetchEvents',
       createEvent: 'events/createEvent',
       fetchUsers: 'users/fetchUsers',
+      updateEvent: 'events/updateEvent',
+      updateEventStatus: 'events/updateEventStatus',
+      deleteEvent: 'events/deleteEvent'
     }),
+    showEvent({nativeEvent, event}) {
+      this.editBody = {...event};
+      this.dialogType = 'edit';
+      this.dialogOn = true;
+    },
     updateRange({start, end}) {
       this.fetchEvents();
     },

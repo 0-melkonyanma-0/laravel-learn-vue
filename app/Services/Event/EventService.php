@@ -33,4 +33,11 @@ class EventService
     {
         Event::find($id)->delete();
     }
+
+    public function updateStatus(int $id)
+    {
+        Event::find($id)->update([
+            'status' => true
+        ]);
+    }
 }

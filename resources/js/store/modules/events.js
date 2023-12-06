@@ -1,8 +1,19 @@
 import axios from "axios";
 
+const default_erorr_state = {
+  name: '',
+  description: '',
+  start: '',
+  end: '',
+  color: '',
+  user_id: '',
+}
+
 export const state = {
+  start: null,
+  end: null,
   events: [],
-  errors: [],
+  errors: default_erorr_state,
 }
 
 export const getters = {
@@ -15,18 +26,25 @@ export const actions = {
       commit('updateEvents', response.data);
     });
   },
-  createEvent({commit, state}, body) {
+  createEvent({commit, state, dispatch}, body) {
     axios.post('/api/events', body).then((response) => {
-      console.log(response);
+      dispatch('fetchEvents');
     }).catch((response) => {
-      console.log(response);
+
     });
   },
-  updateEvent({commit, state}, body) {
-    axios.post(`/api/events/${body.id}`, body).then((response) => {
-      console.log(response);
+  updateEvent({commit, state, dispatch}, body) {
+    axios.patch(`/api/events/${body.id}`, body).then((response) => {
+      dispatch('fetchEvents');
     }).catch((response) => {
-      console.log(response);
+
+    });
+  },
+  updateEventStatus({commit, state, dispatch}, id) {
+    axios.patch(`/api/events-status/${id}`).then((response) => {
+      dispatch('fetchEvents');
+    }).catch((response) => {
+
     });
   },
   deleteEvent({commit, state}, id) {
@@ -41,5 +59,11 @@ export const actions = {
 export const mutations = {
   updateEvents(state, events) {
     state.events = events;
+  },
+  setErrors(state, errors) {
+    state.errors = errors;
+  },
+  clearErrors(state, errors) {
+    state.errors = default_erorr_state;
   }
 }
