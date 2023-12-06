@@ -12,28 +12,28 @@ const default_erorr_state = {
 export const state = {
   start: null,
   end: null,
-  loading: false,
+  request_done: false,
   events: [],
   errors: default_erorr_state,
 }
 
 export const getters = {
-  events: state => state.events
+  events: state => state.events,
+  request_done: state => state.request_done,
+  errors: state => state.errors,
 }
 
 export const actions = {
   fetchEvents({commit, state}) {
-    state.loading = true;
     axios.get(`/api/events`).then((response) => {
-      state.loading = false;
+      state.request_done = true;
       commit('updateEvents', response.data);
     });
   },
   createEvent({commit, state, dispatch}, body) {
-    state.loading = true;
 
     axios.post('/api/events', body).then((response) => {
-      state.loading = false;
+      state.request_done = true;
       commit('clearErrors');
       dispatch('fetchEvents');
     }).catch((err) => {
@@ -41,10 +41,9 @@ export const actions = {
     });
   },
   updateEvent({commit, state, dispatch}, body) {
-    state.loading = true;
 
     axios.patch(`/api/events/${body.id}`, body).then((response) => {
-      state.loading = false;
+      state.request_done = true;
       commit('clearErrors');
       dispatch('fetchEvents');
     }).catch((err) => {
@@ -61,11 +60,12 @@ export const actions = {
       commit('setErrors', err.response.data.errors);
     });
   },
-  deleteEvent({commit, state}, id) {
+  deleteEvent({commit, state, dispatch}, id) {
     state.loading = true;
     axios.delete(`/api/events/${id}`).then((response) => {
       state.loading = false;
       commit('clearErrors');
+      dispatch('fetchEvents');
     }).catch((response) => {
       commit('setErrors', response.data.errors);
     });
@@ -81,5 +81,8 @@ export const mutations = {
   },
   clearErrors(state, errors) {
     state.errors = default_erorr_state;
+  },
+  resetRequestStatus(state) {
+    state.request_done = false;
   }
 }

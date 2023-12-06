@@ -30,7 +30,7 @@ import axios from "axios";
 export default {
   computed: {
     loading() {
-      return loading
+      return loading;
     }
   },
   components: {ActivityLog, EditUser, Card},

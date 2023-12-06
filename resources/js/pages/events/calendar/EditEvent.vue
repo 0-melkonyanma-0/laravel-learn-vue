@@ -16,7 +16,8 @@
       <template v-slot:card-text>
         <v-text-field
           v-model="editBody.name"
-          :disabled="editBody.status"
+          :disabled="disabledField(editBody.status)"
+          :error-messages="proccessedErrors.name"
           :label="$t('title')"
           dense
           outlined
@@ -24,8 +25,9 @@
         </v-text-field>
         <v-textarea
           v-model="editBody.description"
-          :disabled="editBody.status"
+          :disabled="disabledField(editBody.status)"
           :label="$t('description')"
+          :error-messages="proccessedErrors.description"
           dense
           height="100"
           no-resize
@@ -35,8 +37,9 @@
 
         <v-select
           v-model="editBody.user_id"
-          :disabled="editBody.status"
+          :disabled="disabledField(editBody.status)"
           :items="users"
+          :error-messages="proccessedErrors.user_id"
           :label="$t('executor')"
           item-value="id"
           outlined
@@ -51,7 +54,8 @@
 
         <v-text-field
           v-model="editBody.start"
-          :disabled="editBody.status"
+          :disabled="disabledField(editBody.status)"
+          :error-messages="proccessedErrors.start"
           :label="$t('start_date')"
           dense
           name="start"
@@ -61,7 +65,8 @@
         </v-text-field>
         <v-text-field
           v-model="editBody.end"
-          :disabled="editBody.status"
+          :disabled="disabledField(editBody.status)"
+          :error-messages="proccessedErrors.end"
           :label="$t('end_date')"
           dense
           name="end"
@@ -72,7 +77,7 @@
         <div class="justify-content-center">
           <v-color-picker
             v-model="editBody.color"
-            :disabled="editBody.status"
+            :disabled="disabledField(editBody.status)"
             hide-canvas
             hide-inputs
             width="500"
@@ -80,13 +85,19 @@
         </div>
       </template>
       <template v-slot:card-actions>
+        <v-btn
+          @click="updateEventStatus(editBody.id)"
+          outlined
+          plain
+          color="primary"
+          v-if="!editBody.status"
+        >
+          <v-icon>
+            mdi-check
+          </v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
         <div v-if="!editBody.status">
-          <v-btn
-            @click="updateEventStatus(editBody.id)"
-          >
-            {{ $t('done') }}
-          </v-btn>
-          <v-spacer/>
           <v-btn
             v-if="$can('delete events')"
             color="red"
@@ -95,7 +106,9 @@
             type="success"
             @click="deleteEvent(editBody.id)"
           >
-            {{ $t('delete') }}
+            <v-icon>
+              mdi-delete
+            </v-icon>
           </v-btn>
           <v-btn
             v-if="$can('edit events')"
@@ -105,7 +118,9 @@
             type="success"
             @click="updateEvent(editBody)"
           >
-            {{ $t('edit') }}
+            <v-icon>
+              mdi-pencil
+            </v-icon>
           </v-btn>
         </div>
       </template>
@@ -133,6 +148,13 @@ export default {
       updateEventStatus: 'events/updateEventStatus',
       deleteEvent: 'events/deleteEvent'
     }),
+    disabledField(stateTextField) {
+      if (stateTextField === null) {
+        return false;
+      } else if (stateTextField) {
+        return true;
+      }
+    }
   },
   computed: {
     editFormTitle() {

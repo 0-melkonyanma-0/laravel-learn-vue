@@ -1,43 +1,23 @@
-// import {mapActions, mapGetters} from "vuex";
-//
-// export default {
-//   computed: {
-//     proccessedErrors() {
-//       if (Array.isArray(this.errors)) {
-//         return this.errors[0];
-//       }
-//
-//       return this.errors;
-//     },
-//     ...mapGetters({
-//       users: 'users/users',
-//       errors: 'events/errors'
-//     })
-//   },
-//   mounted() {
-//     this.fetchUsers();
-//   },
-//   methods: {
-//     ...mapActions({
-//       createEvent: 'events/createEvent',
-//       fetchUsers: 'users/fetchUsers',
-//     })
-//   }
-// }
-
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   computed: {
     ...mapGetters({
       users: 'users/users',
       loading: 'users/loading',
-      loadingEvents: 'events/loading',
+      request_done: 'events/request_done',
       errors: 'events/errors',
     }),
+    proccessedErrors() {
+      if (Array.isArray(this.errors)) {
+        return this.errors[0];
+      }
+
+      return this.errors;
+    }
   },
   mounted() {
-    if (!this.users.length){
+    if (!this.users.length) {
       this.fetchUsers();
     }
   },
@@ -45,5 +25,26 @@ export default {
     ...mapActions({
       fetchUsers: 'users/fetchUsers',
     }),
+    ...mapMutations({
+      resetRequestStatus: 'events/resetRequestStatus',
+      clearErrors: 'events/clearErrors',
+    }),
+  },
+  watch: {
+    request_done: {
+      handler() {
+        if (this.request_done === true) {
+          this.dialogOn = false;
+          this.resetRequestStatus();
+        }
+      }
+    },
+    dialogOn: {
+      handler() {
+        if(!this.dialogOn) {
+          this.clearErrors();
+        }
+      }
+    }
   }
 }

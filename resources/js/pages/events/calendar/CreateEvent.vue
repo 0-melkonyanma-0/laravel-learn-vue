@@ -14,6 +14,7 @@
         <v-text-field
           v-model="body.name"
           :label="$t('title')"
+          :error-messages="proccessedErrors.name"
           dense
           outlined
         >
@@ -21,6 +22,7 @@
         <v-textarea
           v-model="body.description"
           :label="$t('description')"
+          :error-messages="proccessedErrors.description"
           dense
           height="100"
           no-resize
@@ -30,6 +32,7 @@
 
         <v-select
           v-model="body.user_id"
+          :error-messages="proccessedErrors.user_id"
           :items="users"
           :label="$t('executor')"
           item-value="id"
@@ -45,6 +48,7 @@
 
         <v-text-field
           v-model="body.start"
+          :error-messages="proccessedErrors.start"
           :label="$t('start_date')"
           dense
           name="start"
@@ -54,6 +58,7 @@
         </v-text-field>
         <v-text-field
           v-model="body.end"
+          :error-messages="proccessedErrors.end"
           :label="$t('end_date')"
           dense
           name="end"

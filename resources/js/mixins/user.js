@@ -6,7 +6,6 @@ export default {
     currentUser: {},
     editFormSelectionItems: [],
     loading: true,
-    alert: false,
   }),
   watch: {
     request_done: {
@@ -14,7 +13,6 @@ export default {
         if(this.request_done === true) {
           this.$router.push({name: 'users.index'});
           this.resetRequestStatus();
-          this.alert = true;
         }
       }
     }

@@ -111,9 +111,11 @@ import Card from "../../components/Card.vue";
 import {mapActions, mapGetters} from "vuex";
 import CreateEvent from "./calendar/CreateEvent.vue";
 import EditEvent from "./calendar/EditEvent.vue";
+import events from "../../mixins/events";
 
 export default {
   components: {EditEvent, CreateEvent, Card},
+  mixins: [events],
   metaInfo() {
     return {title: this.$t('calendar')}
   },

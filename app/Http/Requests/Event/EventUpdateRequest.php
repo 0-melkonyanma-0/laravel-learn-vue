@@ -16,7 +16,7 @@ class EventUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'         => ['nullable', 'string', 'bail', 'min:3', 'max:255'],
+            'name'          => ['required', 'string', 'bail', 'min:3', 'max:255'],
             'description'   => ['nullable', 'string', 'bail', 'min:0', 'max:4096'],
             'start'         => ['required', 'date'],
             'end'           => ['required', 'date', 'after:start'],
