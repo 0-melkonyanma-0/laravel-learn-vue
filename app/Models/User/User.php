@@ -135,7 +135,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
                 'sex',
                 'department_id',
                 'job_title_id',
-                'is_active',
+                'status',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()

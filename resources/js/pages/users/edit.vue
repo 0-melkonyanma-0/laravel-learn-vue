@@ -6,13 +6,13 @@
           <v-tab class="white--text">
             {{ $t('edit') }}
           </v-tab>
-          <v-tab class="white--text" v-if="activityLog.length !== 0">
+          <v-tab v-if="activityLog.length !== 0" class="white--text">
             {{ $t('activity_log') }}
           </v-tab>
           <v-tab-item>
             <EditUser :current-user="user"/>
           </v-tab-item>
-          <v-tab-item v-if="activityLog.length !== 0">
+          <v-tab-item v-if="activityLog.length !== 0" @click="loading === true">
             <ActivityLog :activity-log="activityLog"/>
           </v-tab-item>
         </v-tabs>
@@ -28,6 +28,11 @@ import ActivityLog from "./edit/ActivityLog.vue";
 import axios from "axios";
 
 export default {
+  computed: {
+    loading() {
+      return loading
+    }
+  },
   components: {ActivityLog, EditUser, Card},
   data: () => ({
     user: null,
