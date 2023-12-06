@@ -25,13 +25,12 @@ export const getters = {
 
 export const actions = {
   fetchEvents({commit, state}) {
-    axios.get(`/api/events`).then((response) => {
+    axios.get(`/api/events?start=${state.start}&end=${state.end}`).then((response) => {
       state.request_done = true;
       commit('updateEvents', response.data);
     });
   },
   createEvent({commit, state, dispatch}, body) {
-
     axios.post('/api/events', body).then((response) => {
       state.request_done = true;
       commit('clearErrors');
@@ -41,7 +40,6 @@ export const actions = {
     });
   },
   updateEvent({commit, state, dispatch}, body) {
-
     axios.patch(`/api/events/${body.id}`, body).then((response) => {
       state.request_done = true;
       commit('clearErrors');
@@ -84,5 +82,9 @@ export const mutations = {
   },
   resetRequestStatus(state) {
     state.request_done = false;
+  },
+  setStartEnd(state, {start, end}) {
+    state.start = start;
+    state.end = end;
   }
 }

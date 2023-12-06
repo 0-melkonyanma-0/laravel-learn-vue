@@ -108,7 +108,7 @@
 
 <script>
 import Card from "../../components/Card.vue";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import CreateEvent from "./calendar/CreateEvent.vue";
 import EditEvent from "./calendar/EditEvent.vue";
 import events from "../../mixins/events";
@@ -141,12 +141,15 @@ export default {
     }
   }),
   mounted() {
-    this.fetchEvents();
+    // this.updateRange()
     this.$refs.calendar.checkChange();
   },
   methods: {
     ...mapActions({
       fetchEvents: 'events/fetchEvents',
+    }),
+    ...mapMutations({
+      setStartEnd: 'events/setStartEnd',
     }),
     showEvent({nativeEvent, event}) {
       this.editBody = {...event};
@@ -154,6 +157,7 @@ export default {
       this.dialogOn = !this.dialogOn;
     },
     updateRange({start, end}) {
+      this.setStartEnd({start: start.date, end: end.date});
       this.fetchEvents();
     },
     setToday() {
