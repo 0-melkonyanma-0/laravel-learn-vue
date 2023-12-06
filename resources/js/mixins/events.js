@@ -37,7 +37,9 @@ export default {
     }),
   },
   mounted() {
-    this.fetchUsers();
+    if (!this.users.length){
+      this.fetchUsers();
+    }
   },
   methods: {
     ...mapActions({
