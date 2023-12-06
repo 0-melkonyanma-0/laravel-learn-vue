@@ -4,12 +4,18 @@
       v-model="dialogOn"
       width="500"
     >
-      <v-form v-if="createDepartmentDialog && $can('create departments')" @submit.prevent="false">
+      <v-form
+        v-if="createDepartmentDialog && $can('create departments')"
+        @submit.prevent="false"
+      >
         <create :errors="errors">
         </create>
       </v-form>
 
-      <v-form v-else-if="editDepartmentDialog && $can('edit departments')" @submit.prevent="false">
+      <v-form
+        v-else-if="editDepartmentDialog && $can('edit departments')"
+        @submit.prevent="false"
+      >
         <edit :errors="errors" :item="editItem"/>
       </v-form>
     </v-dialog>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Event\EventController;
 use App\Http\Controllers\Settlements\CityController;
 use App\Http\Controllers\Settlements\RegionController;
 use App\Http\Controllers\User\DepartmentController;
@@ -92,6 +93,16 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
             ->middleware(['can:delete roles']);
     });
 
+    Route::group(['middleware' => 'can:index events'], function () {
+        Route::get('events', [EventController::class, 'index']);
+        Route::post('events', [EventController::class, 'store'])
+            ->middleware(['can:create events']);
+        Route::patch('events/{id}', [EventController::class, 'update'])
+            ->middleware(['can:edit events']);
+        Route::delete('events/{id}', [EventController::class, 'destroy'])
+            ->middleware(['can:delete events']);
+    });
+
     Route::group(['middleware' => 'can:index settlements'], function () {
         Route::get('regions', [RegionController::class, 'index']);
         Route::get('export/cities-by-regions', [RegionController::class, 'export']);
@@ -105,7 +116,6 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
         Route::delete('regions/{id}', [RegionController::class, 'destroy']);
         Route::delete('cities/{id}', [CityController::class, 'destroy']);
     });
-
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

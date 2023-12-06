@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Models\Event\Event;
 use App\Models\OAuthProvider;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
@@ -76,10 +77,10 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return $this->belongsTo(JobTitle::class);
     }
 
-    //    public function events(): HasMany
-//    {
-//        return $this->hasMany(Event::class);
-//    }
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
 
     public function getAllPermissionsAttribute()
     {
