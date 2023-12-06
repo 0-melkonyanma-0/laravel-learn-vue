@@ -29,12 +29,13 @@
               {{ formatName(i) }}
               {{ $t('updated') }}
               {{ $t('from') }}
-              <v-chip>{{
-                  log.properties.old[i] !== null ? getInfoById(i, log.properties.old[i]) : $t('not_indicated').toLowerCase()
+              <v-chip>
+                {{
+                  log.properties.old[i] !== null ? $t(getInfoById(i, log.properties.old[i])).toLowerCase() : $t('not_indicated').toLowerCase()
                 }}
               </v-chip>
               {{ $t('to') }}
-              <v-chip>{{ getInfoById(i, log.properties.attributes[i]) }}</v-chip>
+              <v-chip>{{ $t(getInfoById(i, log.properties.attributes[i])).toLowerCase() }}</v-chip>
             </div>
           </v-card-text>
         </v-card>
@@ -72,7 +73,7 @@ export default {
         }
       });
 
-      return this.$t(this.editFormSelectionItems[attributeName].filter((item) => item.id === id)[0]['title']);
+      return this.editFormSelectionItems[attributeName].filter((item) => item.id === id)[0]['title'];
 
     },
     formatName(text) {
