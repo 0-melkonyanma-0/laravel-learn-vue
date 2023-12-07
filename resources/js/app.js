@@ -4,6 +4,7 @@ import router from '~/router'
 import i18n from '~/plugins/i18n'
 import App from '~/components/App'
 import vuetify from '~/plugins/vuetify'
+import Chart from '~/plugins/apexchart';
 
 import '~/plugins'
 import '~/components'

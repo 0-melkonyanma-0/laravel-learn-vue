@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Event\EventController;
+use App\Http\Controllers\Event\StatisticController;
 use App\Http\Controllers\Settlements\CityController;
 use App\Http\Controllers\Settlements\RegionController;
 use App\Http\Controllers\User\DepartmentController;
@@ -103,6 +104,8 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
             ->middleware(['can:edit events']);
         Route::delete('events/{id}', [EventController::class, 'destroy'])
             ->middleware(['can:delete events']);
+        Route::get('statistics', [StatisticController::class, 'index'])
+            ->middleware(['can:index statistics']);
     });
 
     Route::group(['middleware' => 'can:index settlements'], function () {
@@ -110,7 +113,6 @@ Route::group(['middleware' => ['auth:api', 'check-auth-status:api']], function (
         Route::get('export/cities-by-regions', [RegionController::class, 'export']);
         Route::post('import/cities', [CityController::class, 'import']);
         Route::post('import/regions', [RegionController::class, 'import']);
-
         Route::get('cities', [CityController::class, 'index']);
     });
 
