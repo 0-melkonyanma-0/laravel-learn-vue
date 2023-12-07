@@ -15,7 +15,7 @@ class StatisticService
 {
     protected function selectFormatedStatistics(
         Builder $builder,
-        string  $select_date_format = '%d %b.',
+        string  $select_date_format = '%d %b. %Y',
         string  $result_format = 'month'
     ): Collection
     {
@@ -24,17 +24,16 @@ class StatisticService
             DB::raw('COUNT(updated_at) as n')
         )
             ->groupBy('date')
-            ->orderBy('date')
+            ->orderByRaw('YEAR(date),MONTH(date)')
             ->get()
             ->mapToGroups(function ($data) use ($result_format) {
-
                 $date = explode(' ', $data['date']);
 
                 if ($result_format === 'month') {
-                    return [mb_convert_case(sprintf('%s %s', $date[0], __($date[1])), MB_CASE_TITLE) => $data['n']];
+                    return [mb_convert_case(sprintf('%s %s %s', $date[0], __($date[1]), $date[2]), MB_CASE_TITLE) => $data['n']];
                 }
 
-                return [mb_convert_case(sprintf('%s', __($date[0])), MB_CASE_TITLE) => $data['n']];
+                return [mb_convert_case(sprintf('%s %s', __($date[0]), $date[1]), MB_CASE_TITLE) => $data['n']];
             });
     }
 
@@ -57,7 +56,7 @@ class StatisticService
                 return $this->selectFormatedStatistics($statistics);
             }
 
-            return $this->selectFormatedStatistics($statistics, '%b.', 'months');
+            return $this->selectFormatedStatistics($statistics, '%b. %Y', 'months');
         } catch (\Exception $e) {
             return collect([
                 'error' => 'require start & end params'

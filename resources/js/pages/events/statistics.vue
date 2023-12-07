@@ -2,7 +2,6 @@
   <v-container
     fluid
   >
-    {{ dates }}
     <card :title="$t('statistics')">
       <template v-slot:card-text>
         <v-toolbar flat>
@@ -20,7 +19,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="dates"
-                label="Picker in menu"
+                :label="$t('picker_menu')"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
@@ -29,10 +28,11 @@
             </template>
             <v-date-picker
               v-model="dates"
-              :type="type"
               multiple
               no-title
               scrollable
+              :locale="locale"
+              type="months"
             >
               <v-spacer></v-spacer>
               <v-btn
@@ -40,21 +40,21 @@
                 text
                 @click="menu = false"
               >
-                Cancel
+                {{ $t('cancel')}}
               </v-btn>
               <v-btn
                 color="primary"
                 text
                 @click="fetchStatistics"
               >
-                OK
+                {{ $t('choice') }}
               </v-btn>
             </v-date-picker>
           </v-menu>
         </v-toolbar>
         <v-row>
           <v-col v-if="showChart" class="md6">
-            <apexchart :options="chartOptions" :series="series" height="350" type="area"></apexchart>
+            <apexchart ref="realtimeChart" :options="chartOptions" :series="series" height="350"/>
           </v-col>
         </v-row>
       </template>
@@ -65,97 +65,119 @@
 <script>
 import Card from "../../components/Card.vue";
 import moment from "moment";
+import {mapGetters} from "vuex";
 import axios from "axios";
 
 export default {
   components: {Card},
-  data() {
-    return {
-      dates: [],
-      requestDates: {
-        start: '',
-        end: '',
+  data: () => ({
+    loading: false,
+    dates: [],
+    series: [{
+      data: []
+    }],
+    requestDates: {
+      start: '',
+      end: '',
+    },
+    menu: true,
+    showChart: true,
+    chartOptions: {
+      chart: {
+        type: 'bar',
+        height: 350
       },
-      type: 'year',
-      menu: true,
-      showChart: true,
-      series: [{
-        name: 'series2',
-        data: [11, 32, 45, 32, 34, 52, 41]
-      }],
-      chartOptions: {
-        series: [{
-          name: 'Website Blog',
-          type: 'column',
-          data: [440, 505, 414, 671, 227, 413, 201, 352, 752, 320, 257, 160]
-        }, {
-          name: 'Social Media',
-          type: 'line',
-          data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16]
-        }],
-        chart: {
-          height: 350,
-          type: 'line',
-        },
-        stroke: {
-          width: [0, 4]
-        },
-        title: {
-          text: 'Traffic Sources'
-        },
-        dataLabels: {
-          enabled: true,
-          enabledOnSeries: [1]
-        },
-        labels: ['01 Jan 2001', '02 Jan 2001', '03 Jan 2001', '04 Jan 2001', '05 Jan 2001', '06 Jan 2001', '07 Jan 2001', '08 Jan 2001', '09 Jan 2001', '10 Jan 2001', '11 Jan 2001', '12 Jan 2001'],
-        xaxis: {
-          type: 'datetime'
-        },
-        yaxis: [{
-          title: {
-            text: 'Website Blog',
-          },
-
-        }, {
-          opposite: true,
-          title: {
-            text: 'Social Media'
-          }
-        }]
-      }
-    }
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: false,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: [],
+      },
+    },
+  }),
+  computed: {
+    ...mapGetters({
+      statistics: 'statistics/statistics',
+      categories: 'statistics/categories',
+      locale: 'lang/locale',
+    })
   },
   watch: {
     dates: {
       handler() {
         if (this.dates.length > 2) {
-          this.dates.shift();
-        } else {
-          let month = new Date(
-            Number(this.dates[0].substring(0, 4)),
-            Number(this.dates[0].substring(5, 7)) - 1
-          );
-
-          this.dates = [this.dates[0], this.dates[0]];
-
-          this.requestDates = {
-            start: moment(month).startOf('month').format('YYYY-MM-DD'),
-            end: moment(month).endOf('month').format('YYYY-MM-DD'),
-          }
+          this.dates = [this.dates[0].toString(), this.dates[2].toString()];
         }
+
+        this.processedData();
       }
     }
   },
   mounted() {
-    this.showChart = true
+    this.showChart = true;
+    let currentMonth = new Date();
+    this.dates = [
+      moment(currentMonth).format('YYYY-MM'),
+      moment(currentMonth).format('YYYY-MM'),
+    ];
+
+    this.requestDates = {
+      start: moment(currentMonth).startOf('month').format('YYYY-MM-DD'),
+      end: moment(currentMonth).endOf('month').format('YYYY-MM-DD'),
+    };
+
+    this.fetchStatistics();
   },
   methods: {
+    processedData() {
+      try {
+        let selectFirst = new Date(
+          Number(this.dates[0].substring(0, 4)),
+          Number(this.dates[0].substring(5, 7)) - 1
+        );
+
+        let selectSecond = new Date(
+          Number(this.dates[1].substring(0, 4)),
+          Number(this.dates[1].substring(5, 7)) - 1
+        );
+        if (moment(selectSecond).isBefore(moment(selectFirst))) {
+          let temp = selectSecond;
+          selectSecond = selectFirst;
+          selectFirst = temp;
+          this.dates = [this.dates[1], this.dates[0]];
+        }
+
+        this.requestDates = {
+          start: moment(selectFirst).startOf('month').format('YYYY-MM-DD'),
+          end: moment(selectSecond).endOf('month').format('YYYY-MM-DD'),
+        }
+      } catch (e) {
+        console.log('[SOMETHING WENT WRONG]');
+      }
+    },
     fetchStatistics() {
       this.$refs.menu.save(this.dates);
+      this.loading = true;
 
-      axios.get(`/api/statistics?start=${this.requestDates.start}&end=${this.requestDates.end}`).then((response) => {
-        console.log(response.data);
-      });
+
+      axios.get(`/api/statistics?start=${this.requestDates.start}&end=${this.requestDates.end}`)
+        .then((response) => {
+          this.loading = false;
+          this.$refs.realtimeChart.updateSeries([{
+            data: Object.values(response.data).map(el => el[0]),
+          }]);
+          this.$refs.realtimeChart.updateOptions({
+            xaxis: {
+              categories: Object.keys(response.data).map(el => el)
+            }
+          });
+        });
     }
   }
 }
