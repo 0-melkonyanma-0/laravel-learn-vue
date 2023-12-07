@@ -77,6 +77,20 @@
         </v-data-table>
       </template>
     </card>
+<!-- CHECK THIS ZALUPA -->
+<!--    <v-snackbar-->
+<!--      :value="true"-->
+<!--      :timeout="5000"-->
+<!--      color="success"-->
+<!--      right-->
+<!--      rounded-->
+<!--      v-if="success_message_response !== ''"-->
+<!--    >-->
+<!--      <v-icon class="mr-2">-->
+<!--        mdi-check-->
+<!--      </v-icon>-->
+<!--      {{ success_message_response }}-->
+<!--    </v-snackbar>-->
   </v-container>
 </template>
 

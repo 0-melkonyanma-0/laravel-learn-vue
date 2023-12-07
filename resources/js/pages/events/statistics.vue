@@ -4,57 +4,85 @@
   >
     <card :title="$t('statistics')">
       <template v-slot:card-text>
-        <v-toolbar flat>
-          <v-spacer></v-spacer>
-          <v-menu
-            ref="menu"
-            v-model="menu"
-            :close-on-content-click="false"
-            :return-value.sync="dates"
-            max-width="290px"
-            min-width="auto"
-            offset-y
-            transition="scale-transition"
+        <v-toolbar
+          flat
+        >
+          <v-btn
+            icon
+            @click="fetchStatistics"
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="dates"
-                :label="$t('picker_menu')"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="dates"
-              multiple
-              no-title
-              scrollable
-              :locale="locale"
-              type="months"
+            <v-icon>
+              mdi-refresh
+            </v-icon>
+          </v-btn>
+          <v-btn
+            icon
+            @click="dates = []"
+          >
+            <v-icon>
+              mdi-close
+            </v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-toolbar-title>
+            {{ $t('statistics_done_tasks') }}
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <div style="width: 400px" class="mt-10">
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :return-value.sync="dates"
+              max-width="290px"
+              min-width="auto"
+              offset-y
+              transition="scale-transition"
             >
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                text
-                @click="menu = false"
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dates"
+                  :label="$t('picker_menu')"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+
+              </template>
+              <v-date-picker
+                v-model="dates"
+                multiple
+                no-title
+                scrollable
+                :locale="locale"
+                type="months"
               >
-                {{ $t('cancel')}}
-              </v-btn>
-              <v-btn
-                color="primary"
-                text
-                @click="fetchStatistics"
-              >
-                {{ $t('choice') }}
-              </v-btn>
-            </v-date-picker>
-          </v-menu>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="menu = false"
+                >
+                  {{ $t('cancel') }}
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="fetchStatistics"
+                >
+                  {{ $t('choice') }}
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+          </div>
         </v-toolbar>
         <v-row>
           <v-col v-if="showChart" class="md6">
-            <apexchart ref="realtimeChart" :options="chartOptions" :series="series" height="350"/>
+            <apexchart ref="realtimeChartFirst" :options="chartOptions" type="bar" :series="series" height="350"/>
+          </v-col>
+          <v-col v-if="showChart" class="md6">
+            <apexchart ref="realtimeChartSecond" :options="chartOptions" type="donut" :series="series" height="350"/>
           </v-col>
         </v-row>
       </template>
@@ -84,7 +112,6 @@ export default {
     showChart: true,
     chartOptions: {
       chart: {
-        type: 'bar',
         height: 350
       },
       plotOptions: {
@@ -169,13 +196,20 @@ export default {
       axios.get(`/api/statistics?start=${this.requestDates.start}&end=${this.requestDates.end}`)
         .then((response) => {
           this.loading = false;
-          this.$refs.realtimeChart.updateSeries([{
+          this.$refs.realtimeChartFirst.updateSeries([{
             data: Object.values(response.data).map(el => el[0]),
           }]);
-          this.$refs.realtimeChart.updateOptions({
+          this.$refs.realtimeChartFirst.updateOptions({
             xaxis: {
               categories: Object.keys(response.data).map(el => el)
             }
+          });
+
+          this.$refs.realtimeChartSecond.updateSeries([
+            ...Object.values(response.data).map(el => el[0]),
+          ]);
+          this.$refs.realtimeChartSecond.updateOptions({
+            labels: [...Object.keys(response.data)]
           });
         });
     }

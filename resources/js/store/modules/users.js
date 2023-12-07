@@ -13,6 +13,8 @@ const default_erorr_state = {
 export const state = {
   users: [],
   errors: default_erorr_state,
+  success_message_response: '',
+  error_message_response: '',
   loading: true,
   request_done: false,
 }
@@ -21,6 +23,8 @@ export const getters = {
   users: state => state.users,
   errors: state => state.errors,
   loading: state => state.loading,
+  success_message_response: state => state.success_message_response,
+  error_message_response: state => state.error_message_response,
   request_done: state => state.request_done,
 }
 
@@ -33,8 +37,10 @@ export const actions = {
     })
   },
   deleteUser(ctx, id) {
-    axios.delete(`/api/users/${id}`).then(() => {
-      ctx.commit('deleteUser', id)
+    axios.delete(`/api/users/${id}`).then((response) => {
+      ctx.state.success_message_response = response.data.message;
+      console.log(response.data.message);
+      ctx.commit('deleteUser', id);
     });
   },
   updateUser(ctx, user) {

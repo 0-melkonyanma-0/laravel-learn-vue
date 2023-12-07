@@ -21,6 +21,7 @@ export default {
     ...mapGetters({
       errors: 'users/errors',
       request_done: 'users/request_done',
+      success_message_response: 'users/success_message_response',
     }),
     proccessedErrors() {
       if (Array.isArray(this.errors)) {
