@@ -24,6 +24,8 @@ export const actions = {
     axios.delete(`/api/job-titles/${id}`).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
       commit('deleteJobTitle', id);
+    }).catch(() => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
     });
   },
   updateJobTitle(ctx, department) {
@@ -33,6 +35,7 @@ export const actions = {
       ctx.dispatch('fetchJobTitles');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
     });
   },
   createJobTitle(ctx, body) {
@@ -43,6 +46,7 @@ export const actions = {
       ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
     });
   }
 }

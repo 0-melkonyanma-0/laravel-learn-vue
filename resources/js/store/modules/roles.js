@@ -31,6 +31,8 @@ export const actions = {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
 
       ctx.commit('deleteRole', id)
+    }).catch(() => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
     });
   },
   updateRole(ctx, role) {
@@ -40,6 +42,7 @@ export const actions = {
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
     });
   },
   createRole(ctx, body) {
@@ -52,6 +55,7 @@ export const actions = {
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
     });
   }
 }

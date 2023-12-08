@@ -19,8 +19,11 @@ export const getters = {
 }
 
 export const mutations = {
-  SET_RESPONSE_MESSAGE(state, {message, color}) {
-    state.responseStatus = true;
+  SET_RESPONSE_MESSAGE(state, {message, color ,status = 'success'}) {
+    if(status === 'success') {
+      state.responseStatus = true;
+    }
+
     state.responseMessage = {
       show: true,
       icon: color === 'red' ? 'mdi-close' : state.responseMessage.icon,

@@ -37,6 +37,8 @@ export const actions = {
 
       console.log(response.data.message);
       ctx.commit('deleteUser', id);
+    }).catch(() => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
     });
   },
   updateUser(ctx, user) {
@@ -47,6 +49,7 @@ export const actions = {
     }).catch((err) => {
       ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
     });
   },
   createUser(ctx, body) {
@@ -58,6 +61,7 @@ export const actions = {
     }).catch((err) => {
       ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
     });
   }
 }
