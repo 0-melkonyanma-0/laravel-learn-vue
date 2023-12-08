@@ -86,7 +86,7 @@ export const mutations = {
     state.loading = false;
   },
   deleteRole(state, roleId) {
-    state.roles = state.roles.filter((dep) => dep.id !== roleId)
+    state.roles = state.roles.filter((role) => role.id !== roleId)
   },
   setErrors(state, err) {
     state.errors = [err]
