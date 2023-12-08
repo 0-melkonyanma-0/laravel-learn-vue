@@ -26,7 +26,7 @@ export const mutations = {
 
     state.responseMessage = {
       show: true,
-      icon: color === 'red' ? 'mdi-close' : state.responseMessage.icon,
+      icon: color === 'red' ? 'mdi-exclamation' : state.responseMessage.icon,
       color: color,
       message: message,
       timeout: 5000,

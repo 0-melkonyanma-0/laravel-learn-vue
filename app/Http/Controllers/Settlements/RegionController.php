@@ -44,6 +44,6 @@ class RegionController extends Controller
     {
         $this->regionService->import(collect($request->validated()));
 
-        return response()->json(['message' => __('start importing')]);
+        return response()->json(['message' => __('start_importing')]);
     }
 }

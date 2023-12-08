@@ -19,13 +19,19 @@ export default {
         {
           url: '/api/export/cities-by-regions', method: 'GET', responseType: 'blob'
         }
-      ).then((response) => {
-        const href = URL.createObjectURL(response.data);
+      ).then(({data}) => {
+        const href = URL.createObjectURL(data);
 
         const link = document.createElement('a');
         link.href = href;
         link.setAttribute('download', `${this.$t('cities')}_${this.$t('regions')}.xlsx`);
         link.click();
+      }).catch(() => {
+        this.$store.commit('app/SET_RESPONSE_MESSAGE', {
+          message: this.$t('err_export'),
+          color: 'red',
+          status: 'err'
+        }, {root: true});
       });
     },
   },

@@ -12,9 +12,9 @@
             </v-file-input>
           </v-form>
         </template>
-        <template v-slot:card-actions>ye
+        <template v-slot:card-actions>
           <v-spacer></v-spacer>
-          <v-btn width="40" height="40" type="success" @click="importCity">
+          <v-btn type="success" @click="importCity" color="green" outlined>
             {{ $t("importing") }}
           </v-btn>
         </template>
@@ -107,12 +107,17 @@ export default {
     },
     deleteCity(id) {
       axios.delete(`/api/cities/${id}`)
-        .then(() => {
+        .then(({data}) => {
           this.loading = true;
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
           this.fetchCities();
         })
         .catch(() => {
-
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {
+            message: this.$t('err_del_msg'),
+            color: 'red',
+            status: 'err'
+          }, {root: true});
         });
     },
     importCity() {
@@ -130,9 +135,16 @@ export default {
             "Content-Type": this.body.excel_file.type,
           },
         })
-        .then((response) => {
+        .then(({data}) => {
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
           this.dialogOn = false;
-        });
+        }).catch(() => {
+        this.$store.commit('app/SET_RESPONSE_MESSAGE', {
+          message: this.$t('err_import'),
+          color: 'red',
+          status: 'err'
+        }, {root: true});
+      });
     },
   },
   metaInfo() {

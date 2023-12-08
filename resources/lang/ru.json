@@ -18,5 +18,6 @@
   "success_saved": "Сохранение прошло успешно.",
   "success_updated": "Обновление прошло успешно.",
   "success_deleted": "Удалени прошло успешно.",
-  "success_updated_status": "Обновление статуса прошло успешно."
+  "success_updated_status": "Обновление статуса прошло успешно.",
+  "start_importing": "Импортирование началось."
 }

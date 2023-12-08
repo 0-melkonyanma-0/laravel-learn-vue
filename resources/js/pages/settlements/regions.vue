@@ -14,7 +14,7 @@
         </template>
         <template v-slot:card-actions>
           <v-spacer></v-spacer>
-          <v-btn type="success" @click="importRegion">
+          <v-btn type="success" @click="importRegion" color="green" outlined>
             {{ $t("importing") }}
           </v-btn>
         </template>
@@ -36,17 +36,17 @@
             >
             </v-text-field>
             <v-btn class="ml-1" icon @click="fetchRegions"
-              width="40" height="40"
+                   width="40" height="40"
             >
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
             <v-btn class="ml-1" icon @click="exportCitiesByRegion"
-              width="40" height="40"
+                   width="40" height="40"
             >
               <v-icon>mdi-export</v-icon>
             </v-btn>
             <v-btn class="ml-1" icon @click="dialogOn = !dialogOn"
-              width="40" height="40"
+                   width="40" height="40"
             >
               <v-icon>mdi-import</v-icon>
             </v-btn>
@@ -108,11 +108,17 @@ export default {
     deleteRegion(id) {
       axios
         .delete(`/api/regions/${id}`)
-        .then(() => {
+        .then(({data}) => {
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
           this.loading = true;
-          this.fetchCity();
+          this.fetchRegions();
         })
         .catch(() => {
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {
+            message: this.$t('err_del_msg'),
+            color: 'red',
+            status: 'err'
+          }, {root: true});
         });
     },
     importRegion() {
@@ -130,8 +136,16 @@ export default {
             "Content-Type": this.body.excel_file.type,
           },
         })
-        .then((response) => {
+        .then(({data}) => {
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
           this.dialogOn = false;
+        })
+        .catch(() => {
+          this.$store.commit('app/SET_RESPONSE_MESSAGE', {
+            message: this.$t('err_import'),
+            color: 'red',
+            status: 'err'
+          }, {root: true});
         });
     },
   },
