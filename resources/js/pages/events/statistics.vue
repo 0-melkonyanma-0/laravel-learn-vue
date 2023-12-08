@@ -28,7 +28,7 @@
             {{ $t('statistics_done_tasks') }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <div style="width: 400px" class="mt-10">
+          <div class="mt-10" style="width: 400px">
             <v-menu
               ref="menu"
               v-model="menu"
@@ -52,10 +52,10 @@
               </template>
               <v-date-picker
                 v-model="dates"
+                :locale="locale"
                 multiple
                 no-title
                 scrollable
-                :locale="locale"
                 type="months"
               >
                 <v-spacer></v-spacer>
@@ -79,10 +79,10 @@
         </v-toolbar>
         <v-row>
           <v-col v-if="showChart" class="md6">
-            <apexchart ref="realtimeChartFirst" :options="chartOptions" type="bar" :series="series" height="350"/>
+            <apexchart ref="realtimeChartFirst" :options="chartOptions" :series="series" height="350" type="bar"/>
           </v-col>
           <v-col v-if="showChart" class="md6">
-            <apexchart ref="realtimeChartSecond" :options="chartOptions" type="donut" :series="series" height="350"/>
+            <apexchart ref="realtimeChartSecond" :options="chartOptions" :series="series" height="350" type="donut"/>
           </v-col>
         </v-row>
       </template>
@@ -126,6 +126,17 @@ export default {
       xaxis: {
         categories: [],
       },
+      noData: {
+        text: 'No available data',
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: 'black',
+          fontSize: '14px',
+        }
+      }
     },
   }),
   computed: {
@@ -192,10 +203,23 @@ export default {
       this.$refs.menu.save(this.dates);
       this.loading = true;
 
+      const loading = {
+        noData: {
+          text: 'Loading...',
+        }
+      };
+
+      const noAvailable = {
+        noData: {
+          text: 'No available data',
+        }
+      };
+
+      this.$refs.realtimeChartFirst.updateOptions(loading);
+      this.$refs.realtimeChartSecond.updateOptions(loading);
 
       axios.get(`/api/statistics?start=${this.requestDates.start}&end=${this.requestDates.end}`)
         .then((response) => {
-          this.loading = false;
           this.$refs.realtimeChartFirst.updateSeries([{
             data: Object.values(response.data).map(el => el[0]),
           }]);
@@ -211,6 +235,11 @@ export default {
           this.$refs.realtimeChartSecond.updateOptions({
             labels: [...Object.keys(response.data)]
           });
+
+          if (!this.series[0].data.length) {
+            this.$refs.realtimeChartFirst.updateOptions(noAvailable);
+            this.$refs.realtimeChartSecond.updateOptions(noAvailable);
+          }
         });
     }
   }
