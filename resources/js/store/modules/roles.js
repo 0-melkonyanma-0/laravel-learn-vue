@@ -87,9 +87,11 @@ export const mutations = {
   },
   deleteRole(state, roleId) {
     state.roles = state.roles.filter((dep) => dep.id !== roleId)
-  }, setErrors(state, err) {
+  },
+  setErrors(state, err) {
     state.errors = [err]
-  }, clearErrors(state) {
+  },
+  clearErrors(state) {
     state.errors = []
   },
   resetRequestStatus(state) {
