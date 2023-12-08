@@ -57,7 +57,6 @@ export default {
   watch: {
     errors: {
       handler() {
-        console.log('test')
         try {
           this.errorMessage = this.errors[0].title[0];
         } catch (e) {

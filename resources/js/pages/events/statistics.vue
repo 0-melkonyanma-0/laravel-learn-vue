@@ -10,6 +10,8 @@
           <v-btn
             icon
             @click="fetchStatistics"
+            width="40"
+            height="40"
           >
             <v-icon>
               mdi-refresh
@@ -18,6 +20,8 @@
           <v-btn
             icon
             @click="dates = []"
+            width="40"
+            height="40"
           >
             <v-icon>
               mdi-close
@@ -45,6 +49,9 @@
                   :label="$t('picker_menu')"
                   prepend-icon="mdi-calendar"
                   readonly
+                  outlined
+                  dense
+                  height="40"
                   v-bind="attrs"
                   v-on="on"
                 ></v-text-field>

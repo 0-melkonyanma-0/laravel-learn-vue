@@ -25,20 +25,32 @@
       <card :title="$t('regions')">
         <template v-slot:card-title>
           <v-spacer></v-spacer>
-          <v-text-field
-            :placeholder="$t('search_placeholder')"
-            prepend-inner-icon="mdi-magnify"
+          <v-row
+            class="mr-5 mt-5"
           >
-          </v-text-field>
-          <v-btn class="ml-1" icon @click="fetchRegions">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-          <v-btn class="ml-1" icon @click="exportCitiesByRegion">
-            <v-icon>mdi-export</v-icon>
-          </v-btn>
-          <v-btn class="ml-1" icon @click="dialogOn = !dialogOn">
-            <v-icon>mdi-import</v-icon>
-          </v-btn>
+            <v-text-field
+              :placeholder="$t('search_placeholder')"
+              prepend-inner-icon="mdi-magnify"
+              dense
+              outlined
+            >
+            </v-text-field>
+            <v-btn class="ml-1" icon @click="fetchRegions"
+              width="40" height="40"
+            >
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+            <v-btn class="ml-1" icon @click="exportCitiesByRegion"
+              width="40" height="40"
+            >
+              <v-icon>mdi-export</v-icon>
+            </v-btn>
+            <v-btn class="ml-1" icon @click="dialogOn = !dialogOn"
+              width="40" height="40"
+            >
+              <v-icon>mdi-import</v-icon>
+            </v-btn>
+          </v-row>
         </template>
         <template v-slot:card-text>
           <v-data-table

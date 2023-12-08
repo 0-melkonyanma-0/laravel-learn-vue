@@ -21,7 +21,6 @@ export default {
         }
       ).then((response) => {
         const href = URL.createObjectURL(response.data);
-        console.log(response.data);
 
         const link = document.createElement('a');
         link.href = href;

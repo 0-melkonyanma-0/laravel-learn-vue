@@ -68,6 +68,14 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   components: {Card},
+  computed: {
+    ...mapGetters({
+      permissions: 'roles/permissions',
+      loading: 'roles/loading',
+      errors: 'roles/errors',
+      responseStatus: 'app/responseStatus',
+    }),
+  },
   data: () => ({
     body: {
       title: '',
@@ -76,31 +84,8 @@ export default {
     checked: false,
     errorMessage: '',
   }),
-  mounted() {
-    this.fetchRolesAndPermissions();
-  },
   metaInfo() {
     return {title: this.$t('create')}
-  },
-  watch: {
-    errors: {
-      handler() {
-        try {
-          this.errorMessage = this.errors[0].title[0];
-        } catch (e) {
-          this.errorMessage = '';
-          this.title = '';
-        }
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    ...mapGetters({
-      permissions: 'roles/permissions',
-      loading: 'roles/loading',
-      errors: 'roles/errors',
-    }),
   },
   methods: {
     ...mapActions({
@@ -114,6 +99,30 @@ export default {
         this.body.permissions.splice(this.body.permissions.indexOf(permission), 1);
       }
       this.checked = false;
+    }
+  },
+  mounted() {
+    this.fetchRolesAndPermissions();
+  },
+  watch: {
+    errors: {
+      handler() {
+        try {
+          this.errorMessage = this.errors[0].title[0];
+        } catch (e) {
+          this.errorMessage = '';
+          this.title = '';
+        }
+      },
+      deep: true,
+    },
+    responseStatus: {
+      handler() {
+        if (this.responseStatus === true) {
+          this.$router.push({name: 'users.roles'});
+          this.resetRequestStatus();
+        }
+      }
     }
   }
 }

@@ -7,6 +7,21 @@
         <transition mode="out-in" name="page">
           <component :is="layout" v-if="layout"/>
         </transition>
+        <v-snackbar
+          :color="responseMessage.color"
+          :timeout="responseMessage.timeout"
+          :value="responseMessage.show"
+          absolute
+          bottom
+          multi-line
+          right
+          border="right"
+          rounded
+          height="40"
+        >
+          <v-icon>{{ responseMessage.icon }}</v-icon>
+          <span class="ml-4">{{ responseMessage.message }}</span>
+        </v-snackbar>
       </v-main>
     </v-app>
   </div>
@@ -14,6 +29,7 @@
 
 <script>
 import Loading from './Loading'
+import {mapGetters} from "vuex";
 
 // Load layout components dynamically.
 const requireContext = require.context('~/layouts', false, /.*\.vue$/)
@@ -28,17 +44,21 @@ const layouts = requireContext.keys()
   }, {})
 
 export default {
-  el: '#app',
-
   components: {
     Loading
+  },
+
+  computed: {
+    ...mapGetters({
+      responseMessage: 'app/responseMessage',
+    }),
   },
 
   data: () => ({
     layout: null,
     defaultLayout: 'default'
   }),
-
+  el: '#app',
   metaInfo() {
     const {appName} = window.config
 
@@ -46,10 +66,6 @@ export default {
       title: appName,
       titleTemplate: `%s / ${appName}`
     }
-  },
-
-  mounted() {
-    this.$loading = this.$refs.loading
   },
 
   methods: {
@@ -65,6 +81,10 @@ export default {
 
       this.layout = layouts[layout]
     }
+  },
+
+  mounted() {
+    this.$loading = this.$refs.loading
   }
 }
 </script>

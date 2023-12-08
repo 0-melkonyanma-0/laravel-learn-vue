@@ -75,37 +75,6 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   components: {Card},
-  data: () => ({
-    errorMessage: '',
-    checked: false,
-  }),
-  mounted() {
-    this.fetchRolesAndPermissions();
-  },
-  metaInfo() {
-    return {title: this.$t('edit')}
-  },
-  watch: {
-    errors: {
-      handler() {
-        try {
-          this.errorMessage = this.errors[0].title[0];
-        } catch (e) {
-          this.errorMessage = '';
-          this.title = '';
-        }
-      },
-      deep: true,
-    },
-    request_done: {
-      handler() {
-        if(this.request_done === true) {
-          this.$router.push({name: 'users.roles'});
-          this.resetRequestStatus();
-        }
-      }
-    }
-  },
   computed: {
     body() {
       try {
@@ -143,8 +112,15 @@ export default {
       permissions: 'roles/permissions',
       loading: 'roles/loading',
       errors: 'roles/errors',
-      request_done: 'roles/request_done',
+      responseStatus: 'app/responseStatus',
     }),
+  },
+  data: () => ({
+    errorMessage: '',
+    checked: false,
+  }),
+  metaInfo() {
+    return {title: this.$t('edit')}
   },
   methods: {
     ...mapActions({
@@ -162,6 +138,30 @@ export default {
       } else {
         this.body.permissions.splice(this.body.permissions.indexOf(permission), 1);
         checked = false;
+      }
+    }
+  },
+  mounted() {
+    this.fetchRolesAndPermissions();
+  },
+  watch: {
+    errors: {
+      handler() {
+        try {
+          this.errorMessage = this.errors[0].title[0];
+        } catch (e) {
+          this.errorMessage = '';
+          this.title = '';
+        }
+      },
+      deep: true,
+    },
+    responseStatus: {
+      handler() {
+        if (this.responseStatus === true) {
+          this.$router.push({name: 'users.roles'});
+          this.resetRequestStatus();
+        }
       }
     }
   }

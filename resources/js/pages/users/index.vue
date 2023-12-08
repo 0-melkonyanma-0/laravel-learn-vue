@@ -13,20 +13,25 @@
         </v-btn>
         <v-spacer>
         </v-spacer>
-        <v-text-field
-          v-model="search"
-          :placeholder="$t('search_placeholder')"
-          height="40"
-          prepend-inner-icon="mdi-magnify"
-        >
-        </v-text-field>
-        <v-btn
-          class="ml-1"
-          icon
-          @click="fetchUsers"
-        >
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
+        <v-row class="mr-5 mt-5">
+          <v-btn
+            class="mr-1"
+            icon
+            width="40"
+            height="40"
+            @click="fetchUsers"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+          <v-text-field
+            v-model="search"
+            outlined dense
+            :placeholder="$t('search_placeholder')"
+            height="40"
+            prepend-inner-icon="mdi-magnify"
+          >
+          </v-text-field>
+        </v-row>
       </template>
       <template v-slot:card-text>
         <v-data-table
@@ -77,20 +82,6 @@
         </v-data-table>
       </template>
     </card>
-<!-- CHECK THIS ZALUPA -->
-<!--    <v-snackbar-->
-<!--      :value="true"-->
-<!--      :timeout="5000"-->
-<!--      color="success"-->
-<!--      right-->
-<!--      rounded-->
-<!--      v-if="success_message_response !== ''"-->
-<!--    >-->
-<!--      <v-icon class="mr-2">-->
-<!--        mdi-check-->
-<!--      </v-icon>-->
-<!--      {{ success_message_response }}-->
-<!--    </v-snackbar>-->
   </v-container>
 </template>
 
@@ -102,9 +93,7 @@ import Create from "./create.vue";
 import Edit from "./edit.vue";
 
 export default {
-  name: "index.vue",
   components: {Edit, Create, Card},
-  mixins: [tableTitles],
   computed: {
     ...mapGetters({
       users: 'users/users',
@@ -128,16 +117,6 @@ export default {
       return header;
     },
   },
-  mounted() {
-    this.fetchUsers();
-  },
-  watch: {
-    dialogOn: {
-      handler() {
-        this.clearErrors()
-      }
-    }
-  },
   data: () => ({
     search: '',
   }),
@@ -149,6 +128,11 @@ export default {
       fetchUsers: 'users/fetchUsers',
       deleteRole: 'users/deleteUser',
     }),
-  }
+  },
+  mixins: [tableTitles],
+  mounted() {
+    this.fetchUsers();
+  },
+  name: "index.vue",
 }
 </script>

@@ -21,12 +21,14 @@ export const actions = {
     })
   },
   deleteDepartment(ctx, id) {
-    axios.delete(`/api/departments/${id}`).then(() => {
+    axios.delete(`/api/departments/${id}`).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
       ctx.commit('deleteDepartment', id)
     });
   },
   updateDepartment(ctx, department) {
-    axios.patch(`/api/departments/${department.id}`, department).then(() => {
+    axios.patch(`/api/departments/${department.id}`, department).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
       ctx.dispatch('fetchDepartments');
       ctx.commit('clearErrors');
     }).catch((err) => {
@@ -34,7 +36,8 @@ export const actions = {
     });
   },
   createDepartment(ctx, body) {
-    axios.post('/api/departments', {...body}).then((response) => {
+    axios.post('/api/departments', {...body}).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
       ctx.dispatch('fetchDepartments');
       body.title = '';
       ctx.commit('clearErrors');

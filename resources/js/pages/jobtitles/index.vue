@@ -20,6 +20,7 @@
         <v-btn
           v-if="$can('create job_titles')"
           color="primary"
+          height="40"
           rounded
           @click="creator"
         >
@@ -27,20 +28,26 @@
         </v-btn>
         <v-spacer>
         </v-spacer>
-        <v-text-field
-          v-model="search"
-          :placeholder="$t('search_placeholder')"
-          height="40"
-          prepend-inner-icon="mdi-magnify"
-        >
-        </v-text-field>
-        <v-btn
-          class="ml-1"
-          icon
-          @click="fetchJobTitles"
-        >
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
+        <v-row class="mt-5 mr-5">
+          <v-btn
+            class="mr-1"
+            icon
+            @click="fetchJobTitles"
+            height="40"
+            width="40"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+          <v-text-field
+            v-model="search"
+            outlined
+            dense
+            :placeholder="$t('search_placeholder')"
+            height="40"
+            prepend-inner-icon="mdi-magnify"
+          >
+          </v-text-field>
+        </v-row>
       </template>
       <template v-slot:card-text>
         <v-data-table
@@ -73,21 +80,18 @@ import Edit from "./edit.vue";
 import tableTitles from "../../mixins/data_table_titles";
 
 export default {
-  name: "index.vue",
   components: {Edit, Create, Card},
-  mixins: [tableTitles],
-  middleware: 'auth',
   computed: {
     ...mapGetters({
-      jobTitles: 'job_titles/jobTitles',
-      loading: 'job_titles/loading',
       errors: 'job_titles/errors',
+      loading: 'job_titles/loading',
+      jobTitles: 'job_titles/jobTitles',
+      responseStatus: 'app/responseStatus',
     }),
 
     jobTitleTableHeader() {
       let header = [
         {text: this.$t('title'), value: 'title', sortable: true},
-
       ];
 
       if (this.$can('edit job_titles') || this.$can('delete job_titles')) {
@@ -97,19 +101,6 @@ export default {
       return header;
     },
   },
-  metaInfo() {
-    return {title: this.$t('job_titles')}
-  },
-  mounted() {
-    this.fetchJobTitles();
-  },
-  watch: {
-    dialogOn: {
-      handler() {
-        this.clearErrors()
-      }
-    }
-  },
   data: () => ({
     search: '',
     editItem: {},
@@ -118,6 +109,9 @@ export default {
     editDepartmentDialog: false,
     dialogOn: false,
   }),
+  metaInfo() {
+    return {title: this.$t('job_titles')}
+  },
   methods: {
     ...mapActions({
       fetchJobTitles: 'job_titles/fetchJobTitles',
@@ -136,6 +130,26 @@ export default {
       this.dialogOn = true;
       this.createDepartmentDialog = false;
       this.editDepartmentDialog = true;
+    }
+  },
+  middleware: 'auth',
+  mixins: [tableTitles],
+  mounted() {
+    this.fetchJobTitles();
+  },
+  name: "index.vue",
+  watch: {
+    responseStatus: {
+      handler() {
+        if (this.responseStatus === true) {
+          this.dialogOn = false;
+        }
+      }
+    },
+    dialogOn: {
+      handler() {
+        this.clearErrors()
+      }
     }
   }
 }

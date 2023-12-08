@@ -13,20 +13,26 @@
         </v-btn>
         <v-spacer>
         </v-spacer>
-        <v-text-field
-          v-model="search"
-          :placeholder="$t('search_placeholder')"
-          height="40"
-          prepend-inner-icon="mdi-magnify"
-        >
-        </v-text-field>
-        <v-btn
-          class="ml-1"
-          icon
-          @click="fetchRolesAndPermissions"
-        >
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
+        <v-row class="mr-5 mt-5">
+          <v-btn
+            class="mr-1"
+            icon
+            height="40"
+            width="40"
+            @click="fetchRolesAndPermissions"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+          <v-text-field
+            v-model="search"
+            :placeholder="$t('search_placeholder')"
+            height="40"
+            outlined
+            dense
+            prepend-inner-icon="mdi-magnify"
+          >
+          </v-text-field>
+        </v-row>
       </template>
       <template v-slot:card-text>
         <v-data-table
@@ -61,10 +67,7 @@ import Edit from "./edit.vue";
 import tableTitles from "../../mixins/data_table_titles";
 
 export default {
-  name: "index.vue",
-  mixins: [tableTitles],
   components: {Edit, Create, Card},
-  middleware: 'auth',
   computed: {
     ...mapGetters({
       roles: 'roles/roles',
@@ -84,28 +87,31 @@ export default {
       return header;
     },
   },
-  mounted() {
-    this.fetchRolesAndPermissions();
-  },
+  data: () => ({
+    search: '',
+    editItem: {},
+  }),
   metaInfo() {
     return {title: this.$t('roles')}
   },
+  methods: {
+    ...mapActions({
+      fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
+      deleteRole: 'roles/deleteRole',
+    }),
+  },
+  middleware: 'auth',
+  mixins: [tableTitles],
+  mounted() {
+    this.fetchRolesAndPermissions();
+  },
+  name: "index.vue",
   watch: {
     dialogOn: {
       handler() {
         this.clearErrors()
       }
     }
-  },
-  data: () => ({
-    search: '',
-    editItem: {},
-  }),
-  methods: {
-    ...mapActions({
-      fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
-      deleteRole: 'roles/deleteRole',
-    }),
   }
 }
 </script>

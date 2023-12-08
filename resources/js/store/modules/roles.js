@@ -5,7 +5,6 @@ export const state = {
   permissions: [],
   errors: [],
   loading: true,
-  request_done: false,
 }
 
 export const getters = {
@@ -13,7 +12,6 @@ export const getters = {
   permissions: state => state.permissions,
   errors: state => state.errors,
   loading: state => state.loading,
-  request_done: state => state.request_done,
 }
 
 export const actions = {
@@ -29,27 +27,30 @@ export const actions = {
     });
   },
   deleteRole(ctx, id) {
-    axios.delete(`/api/roles/${id}`).then(() => {
+    axios.delete(`/api/roles/${id}`).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.commit('deleteRole', id)
     });
   },
   updateRole(ctx, role) {
-    axios.patch(`/api/roles/${role.id}`, role).then(() => {
-      ctx.state.request_done = true;
+    axios.patch(`/api/roles/${role.id}`, role).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
-      ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
     });
-  }, createRole(ctx, body) {
-    axios.post('/api/roles', {...body}).then((response) => {
+  },
+  createRole(ctx, body) {
+    axios.post('/api/roles', {...body}).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       body.title = '';
       body.permissions = [];
-      ctx.state.request_done = true;
       ctx.commit('clearErrors');
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
-      ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
     });
   }

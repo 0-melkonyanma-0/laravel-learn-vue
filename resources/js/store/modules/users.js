@@ -13,8 +13,6 @@ const default_erorr_state = {
 export const state = {
   users: [],
   errors: default_erorr_state,
-  success_message_response: '',
-  error_message_response: '',
   loading: true,
   request_done: false,
 }
@@ -23,9 +21,6 @@ export const getters = {
   users: state => state.users,
   errors: state => state.errors,
   loading: state => state.loading,
-  success_message_response: state => state.success_message_response,
-  error_message_response: state => state.error_message_response,
-  request_done: state => state.request_done,
 }
 
 export const actions = {
@@ -37,15 +32,17 @@ export const actions = {
     })
   },
   deleteUser(ctx, id) {
-    axios.delete(`/api/users/${id}`).then((response) => {
-      ctx.state.success_message_response = response.data.message;
+    axios.delete(`/api/users/${id}`).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       console.log(response.data.message);
       ctx.commit('deleteUser', id);
     });
   },
   updateUser(ctx, user) {
-    axios.patch(`/api/users/${user.id}`, user).then(() => {
-      ctx.state.request_done = true;
+    axios.patch(`/api/users/${user.id}`, user).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.dispatch('fetchUsers');
     }).catch((err) => {
       ctx.state.request_done = false;
@@ -53,8 +50,9 @@ export const actions = {
     });
   },
   createUser(ctx, body) {
-    axios.post('/api/users', {...body}).then((response) => {
-      ctx.state.request_done = true;
+    axios.post('/api/users', {...body}).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.dispatch('fetchUsers');
       ctx.commit('clearErrors');
     }).catch((err) => {
