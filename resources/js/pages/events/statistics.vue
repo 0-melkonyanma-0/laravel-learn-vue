@@ -200,20 +200,19 @@ export default {
       }
     },
     fetchStatistics() {
-      this.$refs.menu.save(this.dates);
-      this.loading = true;
-
       const loading = {
         noData: {
-          text: 'Loading...',
+          text: this.$t('loading'),
         }
       };
 
       const noAvailable = {
         noData: {
-          text: 'No available data',
+          text: this.$t('no_data_text_period'),
         }
       };
+
+      this.$refs.menu.save(this.dates);
 
       this.$refs.realtimeChartFirst.updateOptions(loading);
       this.$refs.realtimeChartSecond.updateOptions(loading);
