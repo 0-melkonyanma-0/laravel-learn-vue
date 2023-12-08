@@ -31,7 +31,9 @@ export const actions = {
     });
   },
   createEvent({commit, state, dispatch}, body) {
-    axios.post('/api/events', body).then((response) => {
+    axios.post('/api/events', body).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       state.request_done = true;
       commit('clearErrors');
       dispatch('fetchEvents');
@@ -41,7 +43,9 @@ export const actions = {
     });
   },
   updateEvent({commit, state, dispatch}, body) {
-    axios.patch(`/api/events/${body.id}`, body).then((response) => {
+    axios.patch(`/api/events/${body.id}`, body).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       state.request_done = true;
       commit('clearErrors');
       dispatch('fetchEvents');
@@ -52,18 +56,22 @@ export const actions = {
   },
   updateEventStatus({commit, state, dispatch}, id) {
     state.loading = true;
-    axios.patch(`/api/events-status/${id}`).then((response) => {
+    axios.patch(`/api/events-status/${id}`).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       state.loading = false;
       commit('clearErrors');
       dispatch('fetchEvents');
     }).catch((err) => {
       commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_upd_status', color: 'red', status: 'err'}, {root: true});
     });
   },
   deleteEvent({commit, state, dispatch}, id) {
     state.loading = true;
-    axios.delete(`/api/events/${id}`).then((response) => {
+    axios.delete(`/api/events/${id}`).then(({data}) => {
+      this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       state.loading = false;
       commit('clearErrors');
       dispatch('fetchEvents');

@@ -11,7 +11,7 @@
     </v-card>
     <card :title="editFormTitle" v-else>
       <template v-if="editBody.status" v-slot:card-title>
-        <v-chip :color="editBody.color" class="mb-2" text-color="white">{{ editBody.name }}</v-chip>
+        <v-chip :color="editBody.color" class="mb-2" text-color="white">{{ editBody.name.length > 50 ? `${editBody.name.slice(0,51)}...` : editBody.name }}</v-chip>
       </template>
       <template v-slot:card-text>
         <v-text-field

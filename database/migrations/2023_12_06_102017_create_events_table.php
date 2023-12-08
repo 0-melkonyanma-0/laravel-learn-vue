@@ -24,6 +24,7 @@ class CreateEventsTable extends Migration
             $table->timestamp('end');
             $table->string('color');
             $table->boolean('status')->default(false);
+            $table->bigInteger('author_id')->nullable();
             $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
         });
