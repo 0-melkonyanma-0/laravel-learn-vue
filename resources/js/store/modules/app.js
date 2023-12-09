@@ -29,7 +29,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetResponseStatus(state) {
+  resetResponseStatus({state}) {
+    console.log('test');
     state.responseStatus = false;
+    console.log(state.responseStatus);
   }
 }

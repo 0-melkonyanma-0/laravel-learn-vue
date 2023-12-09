@@ -116,6 +116,7 @@ export default {
     ...mapActions({
       fetchJobTitles: 'job_titles/fetchJobTitles',
       deleteJobTitle: 'job_titles/deleteJobTitle',
+      resetResponseStatus: 'app/resetResponseStatus',
     }),
     ...mapMutations({
       clearErrors: 'job_titles/clearErrors',
@@ -143,6 +144,7 @@ export default {
       handler() {
         if (this.responseStatus === true) {
           this.dialogOn = false;
+          this.resetResponseStatus();
         }
       }
     },

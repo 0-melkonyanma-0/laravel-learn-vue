@@ -91,6 +91,7 @@ export default {
     ...mapActions({
       fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
       createRole: 'roles/createRole',
+      resetResponseStatus: 'app/resetResponseStatus',
     }),
     addPermission(permission) {
       if (this.checked && !this.body.permissions.includes(permission)) {

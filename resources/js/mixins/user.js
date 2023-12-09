@@ -1,5 +1,5 @@
 import axios from "axios";
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   computed: {
@@ -21,6 +21,9 @@ export default {
     loading: true,
   }),
   methods: {
+    ...mapActions({
+      resetResponseStatus: 'app/resetResponseStatus',
+    }),
     ...mapMutations({
       clearErrors: 'users/clearErrors',
     })
@@ -38,7 +41,7 @@ export default {
       handler() {
         if (this.responseStatus === true) {
           this.$router.push({name: 'users.index'});
-          this.resetRequestStatus();
+          this.resetResponseStatus();
         }
       }
     },

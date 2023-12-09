@@ -122,6 +122,7 @@ export default {
     ...mapActions({
       fetchDepartments: 'departments/fetchDepartments',
       deleteDepartment: 'departments/deleteDepartment',
+      resetResponseStatus: 'app/resetResponseStatus',
     }),
     ...mapMutations({
       clearErrors: 'departments/clearErrors',
@@ -149,6 +150,7 @@ export default {
       handler() {
         if (this.responseStatus === true) {
           this.dialogOn = false;
+          this.resetResponseStatus();
         }
       }
     },

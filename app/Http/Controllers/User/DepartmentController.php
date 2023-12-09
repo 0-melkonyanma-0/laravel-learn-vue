@@ -11,7 +11,6 @@ use App\Models\User\Department;
 use App\Services\User\DepartmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use mysql_xdevapi\Exception;
 
 class DepartmentController extends Controller
 {
