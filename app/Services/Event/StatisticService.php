@@ -13,30 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class StatisticService
 {
-    protected function selectFormatedStatistics(
-        Builder $builder,
-        string  $select_date_format = '%d %b. %Y',
-        string  $result_format = 'month'
-    ): Collection
-    {
-        return $builder->select(
-            DB::raw(sprintf('DATE_FORMAT(events.updated_at, "%s") as date', $select_date_format)),
-            DB::raw('COUNT(updated_at) as n')
-        )
-            ->groupBy('date')
-            ->orderByRaw('YEAR(date),MONTH(date)')
-            ->get()
-            ->mapToGroups(function ($data) use ($result_format) {
-                $date = explode(' ', $data['date']);
-
-                if ($result_format === 'month') {
-                    return [mb_convert_case(sprintf('%s %s %s', $date[0], __($date[1]), $date[2]), MB_CASE_TITLE) => $data['n']];
-                }
-
-                return [mb_convert_case(sprintf('%s %s', __($date[0]), $date[1]), MB_CASE_TITLE) => $data['n']];
-            });
-    }
-
     public function getStatistics(): Collection
     {
         if (request()->start === null && request()->end) {
@@ -64,4 +40,32 @@ class StatisticService
         }
     }
 
+    protected function selectFormatedStatistics(
+        Builder $builder,
+        string  $select_date_format = '%d %b. %Y',
+        string  $result_format = 'month'
+    ): Collection
+    {
+        $statistic = collect([]);
+
+        $builder->select(
+            DB::raw(sprintf('DATE_FORMAT(events.updated_at, "%s") as date', $select_date_format)),
+            DB::raw('COUNT(updated_at) as n')
+        )
+            ->groupByRaw('date, events.updated_at')
+            ->orderByRaw('events.updated_at')
+            ->get()->groupBy('date')->each(function ($item, $key) use (&$statistic, $result_format) {
+                $data = explode(' ', $key);
+
+                if ($result_format === 'month') {
+                    $key = sprintf("%s %s %s", $data[0], __($data[1]), $data[2]);
+                } else {
+                    $key = sprintf("%s %s", __($data[0]), $data[1]);
+                }
+
+                $statistic->add([$key => collect($item)->pluck('n')->sum()]);
+            });
+
+        return $statistic;
+    }
 }

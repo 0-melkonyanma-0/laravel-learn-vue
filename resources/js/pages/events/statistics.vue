@@ -85,10 +85,10 @@
           </div>
         </v-toolbar>
         <v-row>
-          <v-col v-if="showChart" class="md6">
+          <v-col v-if="showChart" class="lg6">
             <apexchart ref="realtimeChartFirst" :options="chartOptions" :series="series" height="350" type="bar"/>
           </v-col>
-          <v-col v-if="showChart" class="md6">
+          <v-col v-if="showChart" class="lg6">
             <apexchart ref="realtimeChartSecond" :options="chartOptions" :series="series" height="350" type="donut"/>
           </v-col>
         </v-row>
@@ -225,21 +225,29 @@ export default {
       this.$refs.realtimeChartSecond.updateOptions(loading);
 
       axios.get(`/api/statistics?start=${this.requestDates.start}&end=${this.requestDates.end}`)
-        .then((response) => {
+        .then(({data}) => {
+          let series = [];
+          let labels = [];
+
+          data.map((item) => {
+            labels.push(Object.keys(item)[0]);
+            series.push((Object.values(item)[0]));
+          })
+
           this.$refs.realtimeChartFirst.updateSeries([{
-            data: Object.values(response.data).map(el => el[0]),
+            data: series,
           }]);
           this.$refs.realtimeChartFirst.updateOptions({
             xaxis: {
-              categories: Object.keys(response.data).map(el => el)
+              categories: labels
             }
           });
 
           this.$refs.realtimeChartSecond.updateSeries([
-            ...Object.values(response.data).map(el => el[0]),
+            ...series,
           ]);
           this.$refs.realtimeChartSecond.updateOptions({
-            labels: [...Object.keys(response.data)]
+            labels: [...labels]
           });
 
           if (!this.series[0].data.length) {
