@@ -24,7 +24,7 @@ export const mutations = {
 
     setTimeout(() => {
       state.responseMessages = [];
-    }, 10000);
+    }, 100000);
   },
 }
 
