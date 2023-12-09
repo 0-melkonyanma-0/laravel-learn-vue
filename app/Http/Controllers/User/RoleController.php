@@ -51,8 +51,12 @@ class RoleController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $this->roleService->delete($id);
+        try {
+            $this->roleService->delete($id);
 
-        return response()->json(['message' => __('success_deleted')]);
+            return response()->json(['message' => __('success_deleted')]);
+        } catch (\Exception $e) {
+            return response()->json([], 422);
+        }
     }
 }

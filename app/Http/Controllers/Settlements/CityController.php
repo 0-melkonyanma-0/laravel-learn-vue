@@ -26,9 +26,13 @@ class CityController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $this->cityService->delete($id);
+        try {
+            $this->cityService->delete($id);
 
-        return response()->json(['message' => __('success_deleted')]);
+            return response()->json(['message' => __('success_deleted')]);
+        } catch (\Exception $e) {
+            return response()->json([], 422);
+        }
     }
 
     public function import(CitiesByRegionRequest $request): JsonResponse

@@ -141,7 +141,6 @@ export default {
     }
   }),
   mounted() {
-    // this.updateRange()
     this.$refs.calendar.checkChange();
   },
   methods: {

@@ -64,7 +64,7 @@
 
 <script>
 import Card from "../../components/Card.vue";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   components: {Card},
@@ -120,7 +120,7 @@ export default {
       handler() {
         if (this.responseStatus === true) {
           this.$router.push({name: 'users.roles'});
-          this.resetRequestStatus();
+          this.resetResponseStatus();
         }
       }
     }

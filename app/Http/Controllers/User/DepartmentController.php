@@ -11,6 +11,7 @@ use App\Models\User\Department;
 use App\Services\User\DepartmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use mysql_xdevapi\Exception;
 
 class DepartmentController extends Controller
 {
@@ -47,8 +48,12 @@ class DepartmentController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $this->departmentService->delete($id);
+        try {
+            $this->departmentService->delete($id);
 
-        return response()->json(['message' => __('success_deleted')]);
+            return response()->json(['message' => __('success_deleted')]);
+        } catch (\Exception $e) {
+            return response()->json([], 422);
+        }
     }
 }

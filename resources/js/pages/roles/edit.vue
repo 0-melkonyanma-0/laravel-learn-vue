@@ -127,9 +127,7 @@ export default {
       fetchRolesAndPermissions: 'roles/fetchRolesAndPermissions',
       createRole: 'roles/createRole',
       updateRole: 'roles/updateRole',
-    }),
-    ...mapMutations({
-      resetRequestStatus: 'roles/resetRequestStatus',
+      resetResponseStatus: 'app/resetResponseStatus',
     }),
     addPermission(permission, checked) {
       if (checked && !this.body.permissions.includes(permission)) {
@@ -160,7 +158,7 @@ export default {
       handler() {
         if (this.responseStatus === true) {
           this.$router.push({name: 'users.roles'});
-          this.resetRequestStatus();
+          this.resetResponseStatus();
         }
       }
     }

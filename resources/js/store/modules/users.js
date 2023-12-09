@@ -15,7 +15,6 @@ export const state = {
   users: [],
   errors: default_erorr_state,
   loading: true,
-  request_done: false,
 }
 
 export const getters = {
@@ -86,9 +85,6 @@ export const mutations = {
   },
   deleteUser(state, userId) {
     state.users = state.users.filter((user) => user.id !== userId)
-  },
-  resetRequestStatus(state) {
-    state.request_done = false;
   },
   setErrors(state, err) {
     state.errors = [err]

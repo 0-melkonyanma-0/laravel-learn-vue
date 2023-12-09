@@ -56,9 +56,13 @@ class UserController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $this->userService->delete($id);
+        try {
+            $this->userService->delete($id);
 
-        return response()->json(['message' => __('success_deleted')]);
+            return response()->json(['message' => __('success_deleted')]);
+        } catch (\Exception $e){
+            return response()->json([], 422);
+        }
     }
 
     public function getDataForEditForm(): COllection

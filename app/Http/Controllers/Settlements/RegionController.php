@@ -30,9 +30,13 @@ class RegionController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $this->regionService->delete($id);
+        try {
+            $this->regionService->delete($id);
 
-        return response()->json([['message' => __('success_deleted')]]);
+            return response()->json(['message' => __('success_deleted')]);
+        } catch (\Exception $e){
+            return response()->json([], 422);
+        }
     }
 
     public function export(): BinaryFileResponse

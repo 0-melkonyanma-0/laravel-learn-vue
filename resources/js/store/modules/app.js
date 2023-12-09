@@ -9,8 +9,8 @@ export const getters = {
 }
 
 export const mutations = {
-  SET_RESPONSE_MESSAGE(state, {message, color ,status = 'success'}) {
-    if(status === 'success') {
+  SET_RESPONSE_MESSAGE(state, {message, color, status = 'success'}) {
+    if (status === 'success') {
       state.responseStatus = true;
     }
 
@@ -22,10 +22,14 @@ export const mutations = {
       timeout: 5000,
     });
 
-    state.responseStatus = false;
-
     setTimeout(() => {
       state.responseMessages = [];
     }, 10000);
   },
+}
+
+export const actions = {
+  resetResponseStatus(state) {
+    state.responseStatus = false;
+  }
 }

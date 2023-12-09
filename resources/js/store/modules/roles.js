@@ -109,7 +109,4 @@ export const mutations = {
   clearErrors(state) {
     state.errors = []
   },
-  resetRequestStatus(state) {
-    state.request_done = false;
-  }
 }

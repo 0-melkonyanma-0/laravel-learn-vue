@@ -48,8 +48,13 @@ class JobTitleController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $this->jobTitleService->delete($id);
+        try {
+            $this->jobTitleService->delete($id);
 
-        return response()->json(['message' => __('success_deleted')]);
+            return response()->json(['message' => __('success_deleted')]);
+        } catch (\Exception $e) {
+            return response()->json([], 422);
+        }
+
     }
 }
