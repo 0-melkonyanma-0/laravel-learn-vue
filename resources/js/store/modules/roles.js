@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../plugins/i18n";
 
 export const state = {
   roles: [],
@@ -32,7 +33,11 @@ export const actions = {
 
       ctx.commit('deleteRole', id)
     }).catch(() => {
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_del_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   updateRole(ctx, role) {
@@ -42,7 +47,12 @@ export const actions = {
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
+
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_edit_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   createRole(ctx, body) {
@@ -55,7 +65,12 @@ export const actions = {
       ctx.dispatch('fetchRolesAndPermissions');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
+
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_save_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   }
 }

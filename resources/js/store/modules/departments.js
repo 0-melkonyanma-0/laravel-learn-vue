@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../plugins/i18n";
 
 export const state = {
   departments: [],
@@ -23,30 +24,45 @@ export const actions = {
   deleteDepartment(ctx, id) {
     axios.delete(`/api/departments/${id}`).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.commit('deleteDepartment', id)
     }).catch(() => {
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_del_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   updateDepartment(ctx, department) {
     axios.patch(`/api/departments/${department.id}`, department).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.dispatch('fetchDepartments');
       ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_edit_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   createDepartment(ctx, body) {
     axios.post('/api/departments', {...body}).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+
       ctx.dispatch('fetchDepartments');
       body.title = '';
       ctx.commit('clearErrors');
     }).catch((err) => {
       ctx.commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_save_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   }
 }

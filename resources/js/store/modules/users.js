@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../plugins/i18n";
 
 const default_erorr_state = {
   name: '',
@@ -35,10 +36,13 @@ export const actions = {
     axios.delete(`/api/users/${id}`).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
 
-      console.log(response.data.message);
       ctx.commit('deleteUser', id);
     }).catch(() => {
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_del_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   updateUser(ctx, user) {
@@ -48,8 +52,13 @@ export const actions = {
       ctx.dispatch('fetchUsers');
     }).catch((err) => {
       ctx.state.request_done = false;
+
       ctx.commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_edit_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   createUser(ctx, body) {
@@ -61,7 +70,11 @@ export const actions = {
     }).catch((err) => {
       ctx.state.request_done = false;
       ctx.commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_save_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   }
 }

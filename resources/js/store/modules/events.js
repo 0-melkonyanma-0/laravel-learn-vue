@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../plugins/i18n";
 
 const default_erorr_state = {
   name: '',
@@ -39,7 +40,11 @@ export const actions = {
       dispatch('fetchEvents');
     }).catch((err) => {
       commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_save_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_save_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   updateEvent({commit, state, dispatch}, body) {
@@ -51,7 +56,11 @@ export const actions = {
       dispatch('fetchEvents');
     }).catch((err) => {
       commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_edit_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_edit_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   updateEventStatus({commit, state, dispatch}, id) {
@@ -64,7 +73,11 @@ export const actions = {
       dispatch('fetchEvents');
     }).catch((err) => {
       commit('setErrors', err.response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_upd_status', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_upd_status'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   },
   deleteEvent({commit, state, dispatch}, id) {
@@ -77,7 +90,11 @@ export const actions = {
       dispatch('fetchEvents');
     }).catch((response) => {
       commit('setErrors', response.data.errors);
-      this.commit('app/SET_RESPONSE_MESSAGE', {message: 'err_del_msg', color: 'red', status: 'err'}, {root: true});
+      this.commit('app/SET_RESPONSE_MESSAGE', {
+        message: i18n.t('err_del_msg'),
+        color: 'red',
+        status: 'err'
+      }, {root: true});
     });
   }
 }
