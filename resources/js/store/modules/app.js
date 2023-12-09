@@ -1,21 +1,11 @@
-const DEFAULT_MESSAGE = {
-  show: false,
-  icon: 'mdi-check',
-  color: '',
-  message: '',
-  timeout: 5000,
-}
-
 export const state = {
   responseStatus: false,
-  responseMessage: {
-    ...DEFAULT_MESSAGE
-  },
+  responseMessages: [],
 }
 
 export const getters = {
   responseStatus: state => state.responseStatus,
-  responseMessage: state => state.responseMessage,
+  responseMessages: state => state.responseMessages,
 }
 
 export const mutations = {
@@ -24,17 +14,18 @@ export const mutations = {
       state.responseStatus = true;
     }
 
-    state.responseMessage = {
+    state.responseMessages.push({
       show: true,
-      icon: color === 'red' ? 'mdi-exclamation' : state.responseMessage.icon,
+      icon: color === 'red' ? 'mdi-exclamation' : 'mdi-check',
       color: color,
       message: message,
       timeout: 5000,
-    }
+    });
+
+    state.responseStatus = false;
 
     setTimeout(() => {
-      state.responseMessage = DEFAULT_MESSAGE;
-      state.responseStatus = false;
-    }, 5000);
+      state.responseMessages = [];
+    }, 10000);
   },
 }

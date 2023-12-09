@@ -8,9 +8,12 @@
           <component :is="layout" v-if="layout"/>
         </transition>
         <v-snackbar
+          v-for="(responseMessage, idx) in responseMessages"
+          :key="idx"
           :color="responseMessage.color"
           :timeout="responseMessage.timeout"
           :value="responseMessage.show"
+          :style="`bottom: ${idx * 75}px`"
           absolute
           bottom
           multi-line
@@ -50,7 +53,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      responseMessage: 'app/responseMessage',
+      responseMessages: 'app/responseMessages',
     }),
   },
 
