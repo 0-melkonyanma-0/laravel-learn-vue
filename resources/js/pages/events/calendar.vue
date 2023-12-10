@@ -53,6 +53,19 @@
                 mdi-plus
               </v-icon>
             </v-btn>
+            <v-btn
+              color="primary"
+              class="ml-1"
+              fab
+              outlined
+              small
+              text
+              @click="fetchEvents"
+            >
+              <v-icon small>
+                mdi-refresh
+              </v-icon>
+            </v-btn>
             <v-spacer/>
             <v-toolbar-title v-if="$refs.calendar">{{ $refs.calendar.title }}</v-toolbar-title>
             <v-spacer/>
