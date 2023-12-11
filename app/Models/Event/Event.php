@@ -20,7 +20,8 @@ class Event extends Model
         'start',
         'end',
         'color',
-        'user_id'
+        'user_id',
+        'author_id',
     ];
 
     public function user(): BelongsTo

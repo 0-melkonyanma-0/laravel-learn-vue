@@ -30,6 +30,7 @@ export const actions = {
   deleteRole(ctx, id) {
     axios.delete(`/api/roles/${id}`).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+      this.dispatch('app/resetResponseStatus', null, {root: true});
 
       ctx.commit('deleteRole', id)
     }).catch(() => {

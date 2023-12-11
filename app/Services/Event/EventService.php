@@ -42,7 +42,10 @@ class EventService
 
     public function save(array $data): void
     {
-        Event::create($data);
+        Event::create([
+            ...$data,
+            "author_id" => auth()->user()->id,
+        ]);
     }
 
     public function delete(int $id): void

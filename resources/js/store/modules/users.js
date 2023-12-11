@@ -34,6 +34,7 @@ export const actions = {
   deleteUser(ctx, id) {
     axios.delete(`/api/users/${id}`).then(({data}) => {
       this.commit('app/SET_RESPONSE_MESSAGE', {message: data.message, color: 'green'}, {root: true});
+      this.dispatch('app/resetResponseStatus', null, {root: true});
 
       ctx.commit('deleteUser', id);
     }).catch(() => {
